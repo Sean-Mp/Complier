@@ -1,0 +1,3 @@
+result = (a plus b) ;
+print result ;
+halt

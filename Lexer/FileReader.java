@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class FileReader {
     private Tokenizer tokenizer;
-
+    
     public FileReader(String fileName) {
         try {
             tokenizer = new Tokenizer();
@@ -17,23 +17,18 @@ public class FileReader {
                 try {
                     tokenizer.tokenizeLine(line, lineNumber);
                 } catch (TokenException e) {
-                    System.err.println("Error on line " + lineNumber + ": " + e.getMessage());
-                    reader.close();
-                    throw e;
+                    System.err.println("Error at line " + lineNumber + ": " + e.getMessage());
                 }
                 lineNumber++;
             }
             reader.close();
             
-            tokenizer.printTokens();
-            
+            System.out.println("Successfully tokenized " + tokenizer.getTokenList().size() + " tokens");
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
-        } catch (TokenException e) {
-            System.err.println("Tokenization failed: " + e.getMessage());
         }
     }
-
+    
     public Tokenizer getTokenizer() {
         return tokenizer;
     }
