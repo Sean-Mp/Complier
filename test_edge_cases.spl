@@ -1,0 +1,33 @@
+// Edge cases
+
+// Complex nested
+r = (((x plus (y mult 2)) div (z minus 1)) plus (neg x)) ;
+f = ((not (x eq 0)) and ((y > 5) or (z eq 1))) ;
+
+// Multiple unary
+r = (neg (neg (neg x))) ;
+f = (not (not (x eq y))) ;
+
+// Deep nesting
+r = ((((x plus 1) mult (y minus 1)) div ((z plus 2) minus 1)) plus x) ;
+
+// Mixed arithmetic
+f = (((x plus y) > (z mult 2)) and ((x minus y) eq 0)) ;
+
+// Complex boolean
+f = ((x > 0) and (y > 0) and (z eq 0) or (x eq y)) ;
+
+// Procedure calls
+setup() ;
+init(a b c) ;
+proc(data) ;
+clean() ;
+
+// Function calls
+v = calc(b o) ;
+t = sum(v 10 20) ;
+fn = comp(t (x plus y) z) ;
+
+print r ;
+print f ;
+halt

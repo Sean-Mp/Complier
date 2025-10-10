@@ -1,0 +1,40 @@
+// Minimal test
+
+// Empty calls
+np() ;
+
+// Single param
+r = id(x) ;
+inc(y) ;
+
+// Two params  
+sm = add(a b) ;
+cmp(x y) ;
+
+// Three params
+t = sum3(1 2 3) ;
+pr3(a b c) ;
+
+// Minimal loops
+c = 0 ;
+msg = 555 ;
+while (c > 0) {
+  print msg
+} ;
+
+// Single do-until
+do {
+  print msg
+} until (1 > 0) ;
+
+// Simple if
+if (1 > 0) {
+  print msg
+} ;
+
+// Print types
+print msg ;
+print 42 ;
+print v ;
+
+halt

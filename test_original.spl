@@ -1,0 +1,94 @@
+// Test all instruction types
+
+// Simple assignments
+x = 5 ;
+y = 10 ;
+z = 0 ;
+
+// Arithmetic expressions
+result = (x plus y) ;
+result = (x minus y) ;
+result = (x mult y) ;
+result = (x div 2) ;
+
+// Nested expressions
+result = ((x plus y) mult (y minus 3)) ;
+result = (((x plus 1) mult 2) div (y minus 1)) ;
+
+// Unary operations
+result = (neg x) ;
+flag = (not z) ;
+result = (neg (neg x)) ;
+
+// Comparisons
+flag = (x > 5) ;
+flag = (x eq y) ;
+flag = ((x plus 1) > (y minus 1)) ;
+
+// Boolean operations
+flag = ((x > 5) and (y > 5)) ;
+flag = ((x eq 0) or (y eq 0)) ;
+flag = ((x > 0) and ((y > 0) or (z eq 0))) ;
+
+// Print statements
+print "start" ;
+print x ;
+print y ;
+print "values" ;
+print result ;
+
+// While loop
+counter = 5 ;
+while (counter > 0) {
+  print counter ;
+  counter = (counter minus 1) ;
+  print "looping"
+} ;
+
+// Do-until loop
+counter = 0 ;
+do {
+  counter = (counter plus 1) ;
+  print counter ;
+  print "until"
+} until (counter > 3) ;
+
+// If without else
+if (x > 0) {
+  print "positive" ;
+  result = x
+} ;
+
+// If-else
+if (x eq y) {
+  print "equal" ;
+  result = 0
+} else {
+  print "notequal" ;
+  result = (x minus y)
+} ;
+
+// Nested if in while
+counter = 3 ;
+while (counter > 0) {
+  if (counter eq 2) {
+    print "two"
+  } else {
+    print counter
+  } ;
+  counter = (counter minus 1)
+} ;
+
+// Procedure call (no return)
+initialize() ;
+display(x y z) ;
+
+// Function call assignments
+result = add(x y) ;
+sum = compute(10 20 30) ;
+
+// Final sequence testing ALGO conflict
+print "done" ;
+print result ;
+print sum ;
+halt

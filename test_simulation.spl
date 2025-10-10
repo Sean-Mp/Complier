@@ -1,0 +1,56 @@
+// Simulation
+
+s = 100 ;
+p = 25 ;
+sd = 0 ;
+r = 0 ;
+msg1 = 111 ;
+msg2 = 222 ;
+
+print msg1 ;
+
+// Process sales
+while (s > 0) {
+  sl = 5 ;
+  
+  if (sl > s) {
+    sl = s ;
+    print msg2
+  } ;
+  
+  s = (s minus sl) ;
+  sd = (sd plus sl) ;
+  br = (sl mult p) ;
+  r = (r plus br) ;
+  
+  print sd ;
+  print sl ;
+  print br ;
+  print s
+} ;
+
+// Calculate stats
+ap = (r div sd) ;
+e = ((sd mult 100) div 100) ;
+
+print msg1 ;
+print sd ;
+print r ;
+print ap ;
+
+// Restock logic
+if (e > 80) {
+  print e ;
+  oq = 150 ;
+  proc(oq)
+} else {
+  if (e > 50) {
+    print e ;
+    oq = 80
+  } else {
+    print e ;
+    oq = 0
+  }
+} ;
+
+halt

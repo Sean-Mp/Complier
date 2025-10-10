@@ -1,0 +1,175 @@
+// Comprehensive SPL Test Program
+// Tests all grammar productions
+
+glob {
+  counter
+  total
+  max
+}
+
+proc {
+  // Procedure with no parameters
+  initialize() {
+    local { }
+    counter = 0 ;
+    total = 0 ;
+    max = 100 ;
+    print "initialized"
+  }
+
+  // Procedure with one parameter
+  printnum(n) {
+    local { }
+    print n
+  }
+
+  // Procedure with three parameters and local variables
+  display(a b c) {
+    local { temp1 temp2 }
+    temp1 = a ;
+    temp2 = (b plus c) ;
+    print temp1 ;
+    print temp2
+  }
+}
+
+func {
+  // Function with arithmetic expression
+  add(x y) {
+    local { result }
+    result = (x plus y) ;
+    return result
+  }
+
+  // Function with complex expression
+  compute(a b c) {
+    local { temp1 temp2 answer }
+    temp1 = (a mult b) ;
+    temp2 = (temp1 plus c) ;
+    answer = (temp2 div 2) ;
+    return answer
+  }
+
+  // Function with unary operation
+  negate(val) {
+    local { }
+    return (neg val)
+  }
+
+  // Function with boolean operations
+  checkrange(num) {
+    local { toobig }
+    toobig = (num > max) ;
+    return toobig
+  }
+}
+
+main {
+  var {
+    num1
+    num2
+    sum
+    product
+    result
+    flag
+  }
+
+  // Initialize global variables
+  initialize() ;
+
+  // Test simple assignments
+  num1 = 10 ;
+  num2 = 20 ;
+
+  // Test string output
+  print "testing" ;
+  print "numbers" ;
+
+  // Test variable output
+  print num1 ;
+  print num2 ;
+
+  // Test function calls with different INPUT variations
+  sum = add(num1 num2) ;
+  print sum ;
+
+  // Test arithmetic operations
+  result = (num1 plus num2) ;
+  product = (num1 mult num2) ;
+  result = (product minus num1) ;
+  result = (result div 5) ;
+
+  // Test nested expressions
+  result = ((num1 plus num2) mult (num2 minus 5)) ;
+
+  // Test unary operations
+  result = (neg num1) ;
+  flag = (not 0) ;
+
+  // Test comparison operations
+  flag = (num1 > 5) ;
+  flag = (num1 eq num2) ;
+
+  // Test boolean operations
+  flag = ((num1 > 5) and (num2 > 10)) ;
+  flag = ((num1 eq 0) or (num2 eq 0)) ;
+
+  // Test while loop
+  counter = 0 ;
+  while (counter > (neg 5)) {
+    print counter ;
+    counter = (counter minus 1) ;
+    print "loop"
+  }
+
+  // Test do-until loop
+  counter = 0 ;
+  do {
+    counter = (counter plus 1) ;
+    print counter
+  } until (counter > 3) ;
+
+  // Test if without else
+  if (num1 > 5) {
+    print "large" ;
+    print num1
+  }
+
+  // Test if-else
+  if (num1 eq num2) {
+    print "equal"
+  } else {
+    print "notequal" ;
+    result = (num1 minus num2)
+  }
+
+  // Test nested control structures
+  if (num1 > 0) {
+    counter = 0 ;
+    while (counter > (neg 3)) {
+      if (counter eq 0) {
+        print "zero"
+      } else {
+        print counter
+      }
+      counter = (counter minus 1)
+    }
+  }
+
+  // Test procedure calls
+  printnum(sum) ;
+  display(num1 num2 sum) ;
+
+  // Test complex function call
+  result = compute(10 20 30) ;
+  print result ;
+
+  // Test function result in expression
+  result = (add(5 10) plus add(15 20)) ;
+  print result ;
+
+  // Final output
+  print "completed" ;
+  print total ;
+  halt
+}

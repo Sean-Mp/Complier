@@ -1,0 +1,61 @@
+// Control flow
+
+c = 5 ;
+t = 0 ;
+msg = 999 ;
+
+// Nested while
+o = 2 ;
+while (o > 0) {
+  i = 3 ;
+  print msg ;
+  
+  while (i > 0) {
+    print msg ;
+    t = (t plus 1) ;
+    i = (i minus 1)
+  } ;
+  
+  o = (o minus 1)
+} ;
+
+// Do-until
+v = 0 ;
+do {
+  v = (v plus 1) ;
+  print v ;
+  
+  if (v eq 3) {
+    print v ;
+    r = (v mult 2)
+  } else {
+    if (v > 3) {
+      print v
+    } else {
+      print v
+    }
+  }
+} until (v > 5) ;
+
+// If-else chain
+s = 75 ;
+if (s > 90) {
+  g = 1 ;
+  print g
+} else {
+  if (s > 80) {
+    g = 2 ;
+    print g
+  } else {
+    if (s > 70) {
+      g = 3 ;
+      print g
+    } else {
+      g = 4 ;
+      print g
+    }
+  }
+} ;
+
+print t ;
+halt

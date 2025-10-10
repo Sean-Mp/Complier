@@ -1,0 +1,25 @@
+glob { x y z result }
+proc { 
+  init ( ) { local { } x = 0 ; y = 0 ; z = 0 }
+  show ( a b ) { local { } print a ; print b }
+}
+func {
+  add ( x y ) { local { } return x }
+  mult ( a b ) { local { } return a }
+}
+main {
+  var { x y z result }
+  x = 5 ;
+  y = 10 ;
+  z = 0 ;
+  result = (x plus y) ;
+  result = (x mult y) ;
+  print x ;
+  print y ;
+  print result ;
+  init() ;
+  show(x y) ;
+  result = add(x y) ;
+  result = mult(x y) ;
+  halt
+}
