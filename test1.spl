@@ -1,0 +1,22 @@
+glob { var globalcounter } 
+proc { 
+  greet (name) { 
+    local { message } 
+    message = "Hello" 
+    print message 
+    print name 
+  } 
+} 
+func { 
+  multiply (x y) { 
+    local { result } 
+    result = ( x mult y ) 
+    return result 
+  } 
+} 
+main { 
+  var { a } 
+  a = 5 
+  greet ("World") 
+  halt 
+}
