@@ -1,0 +1,3 @@
+result = ((a plus b) mult (c minus d)) ;
+print result ;
+halt

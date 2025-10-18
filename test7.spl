@@ -1,0 +1,4 @@
+result = (a and b) ;
+result = (x or y) ;
+print result ;
+halt

@@ -1,0 +1,60 @@
+glob { x y z result flag counter sum avg }
+proc { 
+  setup ( ) { local { } x = 0 ; y = 0 ; z = 0 }
+  display ( a b c ) { local { } print a ; print b ; print c }
+  reset ( ) { local { } counter = 0 ; sum = 0 }
+}
+func {
+  calculate ( x y ) { local { r } r = (x plus y) ; return r }
+  average ( a b ) { local { r } r = ((a plus b) div 2) ; return r }
+  max ( x y ) { local { r } if (x > y) { r = x } else { r = y } ; return r }
+}
+main {
+  var { x y z result flag counter sum avg }
+  
+  // Initialize
+  x = 15 ;
+  y = 25 ;
+  z = 0 ;
+  
+  // Arithmetic operations
+  result = (x plus y) ;
+  result = (x minus y) ;
+  result = (x mult y) ;
+  result = (x div 3) ;
+  
+  // Complex expressions
+  result = ((x plus y) mult (y minus 5)) ;
+  result = (((x plus 1) mult 2) div (y minus 1)) ;
+  
+  // Unary operations
+  result = (neg x) ;
+  flag = (not z) ;
+  
+  // Comparisons
+  flag = (x > 10) ;
+  flag = (x eq y) ;
+  flag = ((x plus 1) > (y minus 1)) ;
+  
+  // Boolean operations
+  flag = ((x > 10) and (y > 10)) ;
+  flag = ((x eq 0) or (y eq 0)) ;
+  flag = ((x > 0) and ((y > 0) or (z eq 0))) ;
+  
+  // Procedure calls
+  setup() ;
+  display(x y z) ;
+  reset() ;
+  
+  // Function calls
+  result = calculate(x y) ;
+  avg = average(x y) ;
+  result = max(x y) ;
+  
+  // Print results
+  print result ;
+  print avg ;
+  print flag ;
+  
+  halt
+}

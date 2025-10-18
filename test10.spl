@@ -1,0 +1,4 @@
+print "Result" ;
+print x ;
+print "Done" ;
+halt

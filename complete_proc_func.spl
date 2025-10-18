@@ -1,0 +1,35 @@
+glob { a b c d res1 res2 res3 }
+proc { 
+  proc1 ( ) { local { } a = 1 ; b = 2 }
+  proc2 ( x ) { local { } print x }
+  proc3 ( x y ) { local { } print x ; print y }
+  proc4 ( x y z ) { local { } print x ; print y ; print z }
+}
+func {
+  func1 ( ) { local { r } r = 100 ; return r }
+  func2 ( x ) { local { r } r = (x plus 10) ; return r }
+  func3 ( x y ) { local { r } r = (x plus y) ; return r }
+  func4 ( x y z ) { local { r } r = ((x plus y) plus z) ; return r }
+}
+main {
+  var { a b c d res1 res2 res3 }
+  
+  // Test all procedure patterns
+  proc1() ;
+  proc2(a) ;
+  proc3(a b) ;
+  proc4(a b c) ;
+  
+  // Test all function patterns
+  res1 = func1() ;
+  res2 = func2(a) ;
+  res3 = func3(a b) ;
+  res1 = func4(a b c) ;
+  
+  // Print results
+  print res1 ;
+  print res2 ;
+  print res3 ;
+  
+  halt
+}

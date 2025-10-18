@@ -1,0 +1,65 @@
+glob { counter total value score grade }
+proc { 
+  start ( ) { local { } counter = 0 ; total = 0 }
+  end ( ) { local { } print total }
+}
+func {
+  check ( n ) { local { r } if (n > 10) { r = 1 } else { r = 0 } ; return r }
+}
+main {
+  var { counter total value score grade }
+  
+  start() ;
+  
+  // While loop
+  counter = 5 ;
+  while (counter > 0) {
+    print counter ;
+    total = (total plus counter) ;
+    counter = (counter minus 1)
+  } ;
+  
+  // Do-until loop
+  value = 0 ;
+  do {
+    value = (value plus 1) ;
+    print value ;
+    if (value eq 3) {
+      print value
+    } else {
+      if (value > 3) {
+        print value
+      } else {
+        print value
+      }
+    }
+  } until (value > 5) ;
+  
+  // If-else chain
+  score = 85 ;
+  if (score > 90) {
+    grade = 1 ;
+    print grade
+  } else {
+    if (score > 80) {
+      grade = 2 ;
+      print grade
+    } else {
+      if (score > 70) {
+        grade = 3 ;
+        print grade
+      } else {
+        grade = 4 ;
+        print grade
+      }
+    }
+  } ;
+  
+  // Function call in condition
+  if (check(total) eq 1) {
+    print total
+  } ;
+  
+  end() ;
+  halt
+}
