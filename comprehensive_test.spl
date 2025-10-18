@@ -1,175 +1,148 @@
-// Comprehensive SPL Test Program
-// Tests all grammar productions
+glob { 
+  counter 
+  globalresult 
+} 
 
-glob {
-  counter
-  total
-  max
-}
-
-proc {
-  // Procedure with no parameters
-  initialize() {
-    local { }
-    counter = 0 ;
-    total = 0 ;
-    max = 100 ;
-    print "initialized"
+proc { 
+  increment () { 
+    local {} 
+    counter = ( counter plus 1 ) 
   }
-
-  // Procedure with one parameter
-  printnum(n) {
-    local { }
-    print n
+  greet (name times) { 
+    local { i } 
+    i = 0 ; 
+    while ( times > i ) { 
+      print "Hello" ; 
+      print name ; 
+      i = ( i plus 1 ) 
+    } 
   }
+  checknumber (n) { 
+    local {} 
+    if ( n > 10 ) { 
+      print "Big" 
+    } else { 
+      if ( n > 5 ) { 
+        print "Medium" 
+      } else { 
+        print "Small" 
+      } 
+    } 
+  } 
+} 
 
-  // Procedure with three parameters and local variables
-  display(a b c) {
-    local { temp1 temp2 }
-    temp1 = a ;
-    temp2 = (b plus c) ;
-    print temp1 ;
-    print temp2
+func { 
+  factorial (x) { 
+    local { result i } 
+    result = 1 ; 
+    i = 1 ; 
+    while ( x > i ) { 
+      result = ( result mult i ) ; 
+      i = ( i plus 1 ) 
+    } ; 
+    return result 
   }
-}
-
-func {
-  // Function with arithmetic expression
-  add(x y) {
-    local { result }
-    result = (x plus y) ;
-    return result
+  max (a b) { 
+    local {} 
+    if ( a > b ) { 
+      halt 
+    } else { 
+      halt 
+    } ; 
+    return a 
   }
+  iseven (n) { 
+    local { temp } 
+    temp = ( n div 2 ) ; 
+    temp = ( temp mult 2 ) ; 
+    if ( temp eq n ) { 
+      halt 
+    } else { 
+      halt 
+    } ; 
+    return 1 
+  } 
+} 
 
-  // Function with complex expression
-  compute(a b c) {
-    local { temp1 temp2 answer }
-    temp1 = (a mult b) ;
-    temp2 = (temp1 plus c) ;
-    answer = (temp2 div 2) ;
-    return answer
-  }
-
-  // Function with unary operation
-  negate(val) {
-    local { }
-    return (neg val)
-  }
-
-  // Function with boolean operations
-  checkrange(num) {
-    local { toobig }
-    toobig = (num > max) ;
-    return toobig
-  }
-}
-
-main {
-  var {
-    num1
-    num2
-    sum
-    product
-    result
-    flag
-  }
-
-  // Initialize global variables
-  initialize() ;
-
-  // Test simple assignments
-  num1 = 10 ;
-  num2 = 20 ;
-
-  // Test string output
-  print "testing" ;
-  print "numbers" ;
-
-  // Test variable output
-  print num1 ;
-  print num2 ;
-
-  // Test function calls with different INPUT variations
-  sum = add(num1 num2) ;
-  print sum ;
-
-  // Test arithmetic operations
-  result = (num1 plus num2) ;
-  product = (num1 mult num2) ;
-  result = (product minus num1) ;
-  result = (result div 5) ;
-
-  // Test nested expressions
-  result = ((num1 plus num2) mult (num2 minus 5)) ;
-
-  // Test unary operations
-  result = (neg num1) ;
-  flag = (not 0) ;
-
-  // Test comparison operations
-  flag = (num1 > 5) ;
-  flag = (num1 eq num2) ;
-
-  // Test boolean operations
-  flag = ((num1 > 5) and (num2 > 10)) ;
-  flag = ((num1 eq 0) or (num2 eq 0)) ;
-
-  // Test while loop
-  counter = 0 ;
-  while (counter > (neg 5)) {
-    print counter ;
-    counter = (counter minus 1) ;
-    print "loop"
-  }
-
-  // Test do-until loop
-  counter = 0 ;
-  do {
-    counter = (counter plus 1) ;
-    print counter
-  } until (counter > 3) ;
-
-  // Test if without else
-  if (num1 > 5) {
-    print "large" ;
-    print num1
-  }
-
-  // Test if-else
-  if (num1 eq num2) {
-    print "equal"
-  } else {
-    print "notequal" ;
-    result = (num1 minus num2)
-  }
-
-  // Test nested control structures
-  if (num1 > 0) {
-    counter = 0 ;
-    while (counter > (neg 3)) {
-      if (counter eq 0) {
-        print "zero"
-      } else {
-        print counter
-      }
-      counter = (counter minus 1)
-    }
-  }
-
-  // Test procedure calls
-  printnum(sum) ;
-  display(num1 num2 sum) ;
-
-  // Test complex function call
-  result = compute(10 20 30) ;
-  print result ;
-
-  // Test function result in expression
-  result = (add(5 10) plus add(15 20)) ;
-  print result ;
-
-  // Final output
-  print "completed" ;
-  print total ;
-  halt
+main { 
+  var { num1 num2 temp result loopcounter fact3 fact4 } 
+  
+  num1 = 5 ; 
+  num2 = 8 ; 
+  
+  print "Testing fac:" ; 
+  result = factorial ( num1 ) ; 
+  print result ; 
+  
+  print "Testing max:" ; 
+  temp = max ( num1 num2 ) ; 
+  print temp ; 
+  
+  print "Test greet:" ; 
+  greet ( num2 3 ) ; 
+  
+  print "Test checknum:" ; 
+  checknumber ( 7 ) ; 
+  checknumber ( 15 ) ; 
+  checknumber ( 3 ) ; 
+  
+  print "Test iseven:" ; 
+  temp = iseven ( num1 ) ; 
+  print temp ; 
+  temp = iseven ( num2 ) ; 
+  print temp ; 
+  
+  print "Test do-until:" ; 
+  loopcounter = 0 ; 
+  do { 
+    print "Do-until it:" ; 
+    print loopcounter ; 
+    loopcounter = ( loopcounter plus 1 ) 
+  } until ( loopcounter > 2 ) ; 
+  
+  print "Test counter:" ; 
+  print counter ; 
+  
+  print "Test complex:" ; 
+  fact3 = factorial ( 3 ) ; 
+  globalresult = ( ( num1 mult num2 ) plus fact3 ) ; 
+  print globalresult ; 
+  
+  print "Test nested:" ; 
+  fact3 = factorial ( 3 ) ; 
+  fact4 = factorial ( 4 ) ; 
+  temp = max ( fact3 fact4 ) ; 
+  print temp ; 
+  
+  print "Test unary:" ; 
+  temp = ( neg 10 ) ; 
+  print temp ; 
+  temp = ( not 0 ) ; 
+  print temp ; 
+  
+  print "Test compare:" ; 
+  if ( num1 eq num2 ) { 
+    print "Equal" 
+  } else { 
+    print "Not equal" 
+  } ; 
+  
+  if ( num1 > num2 ) { 
+    print "Less than" 
+  } ; 
+  
+  if ( num2 > num1 ) { 
+    print "Greater than" 
+  } ; 
+  
+  print "Test multiple:" ; 
+  num1 = 100 ; 
+  num2 = 200 ; 
+  temp = 300 ; 
+  print num1 ; 
+  print num2 ; 
+  print temp ; 
+  
+  print "completed!" ; 
+  halt 
 }
