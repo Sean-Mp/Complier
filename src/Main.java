@@ -1,5 +1,6 @@
 import java_cup.runtime.*;
 import java.io.*;
+import symboltable.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,12 +14,18 @@ public class Main {
                 inputStream = System.in;
             }
             
+            // Initialize lexer and parser
             Lexer lexer = new Lexer(new InputStreamReader(inputStream));
             Parser parser = new Parser(lexer);
             
             System.out.println("Starting parse...");
             parser.parse();
             System.out.println("✓ Parsing completed successfully!");
+            
+            // Print the symbol table from the parser
+            System.out.println("\n=== SYMBOL TABLE ===");
+            SymbolTable symbolTable = parser.getSymbolTable();
+            symbolTable.printSymbolTable();
             
         } catch (Exception e) {
             System.err.println("Error during parsing: " + e.getMessage());

@@ -18,7 +18,7 @@ non terminal variables, procs, funcs, main_prog;
 non terminal algo, instr, assign, term, atom, input, output;
 non terminal loop, branch, unop, binop, body, maxthree, param_list;
 non terminal pdef, fdef, main_variables, variable_list, main_var_list;
-non terminal instr_list;
+non terminal instr_list;  // ADD THIS LINE
 
 // Precedence rules
 precedence left OR;
@@ -28,14 +28,11 @@ precedence left PLUS, MINUS;
 precedence left MULT, DIV;
 precedence right NEG, NOT;
 
-/* Parser code section */
-parser code {:
-    private SymbolTable symbolTable = new SymbolTable();
-    
-    public SymbolTable getSymbolTable() {
-        return symbolTable;
-    }
-:};
+// Parser code section
+parser code {:{
+    public SymbolTable symbolTable;
+    public parser(java_cup.runtime.Scanner s, SymbolTable st) { super(s); symbolTable = st; }
+}:};
 
 start with spl_prog;
 
@@ -44,12 +41,10 @@ spl_prog ::= GLOB LBRACE variables:vars RBRACE
              PROC LBRACE procs:procs RBRACE 
              FUNC LBRACE funcs:funcs RBRACE 
              MAIN LBRACE main_prog:main RBRACE
-            {: 
-                System.out.println("VALID SPL PROGRAM"); 
-            :}
+            {: System.out.println("VALID SPL PROGRAM"); :}
             ;
 
-// === VARIABLES (for glob section) ===
+// === VARIABLES (for glob section) - FIXED: resolved conflict ===
 variables ::= 
              {: /* epsilon */ :}
             | variable_list:vl
@@ -58,16 +53,21 @@ variables ::=
 variable_list ::= USER_DEFINED_NAME:name 
                  {: 
                      System.out.println("GLOBAL VAR: " + name); 
-                     symbolTable.addSymbol(name.toString(), "GLOBAL");
+                     if (symbolTable != null) {
+                         symbolTable.enterScope();
+                         symbolTable.addSymbol(name.toString(), "GLOBAL");
+                     }
                  :}
                 | variable_list:vl USER_DEFINED_NAME:name 
                  {: 
                      System.out.println("GLOBAL VAR: " + name); 
-                     symbolTable.addSymbol(name.toString(), "GLOBAL");
+                     if (symbolTable != null) {
+                         symbolTable.addSymbol(name.toString(), "GLOBAL");
+                     }
                  :}
                 ;
 
-// === MAIN VARIABLES ===
+// === MAIN VARIABLES - FIXED: resolved conflict ===
 main_variables ::= 
                  {: /* epsilon */ :}
                 | main_var_list:mvl
@@ -76,12 +76,17 @@ main_variables ::=
 main_var_list ::= USER_DEFINED_NAME:name 
                  {: 
                      System.out.println("MAIN VAR: " + name); 
-                     symbolTable.addSymbol(name.toString(), "MAIN");
+                     if (symbolTable != null) {
+                         symbolTable.enterScope();
+                         symbolTable.addSymbol(name.toString(), "MAIN");
+                     }
                  :}
                 | main_var_list:mvl USER_DEFINED_NAME:name 
                  {: 
                      System.out.println("MAIN VAR: " + name); 
-                     symbolTable.addSymbol(name.toString(), "MAIN");
+                     if (symbolTable != null) {
+                         symbolTable.addSymbol(name.toString(), "MAIN");
+                     }
                  :}
                 ;
 
@@ -94,12 +99,14 @@ procs ::=
 pdef ::= USER_DEFINED_NAME:name LPAREN param_list:params RPAREN LBRACE body:b algo:a RBRACE
         {: 
             System.out.println("PROCEDURE: " + name);
-            symbolTable.enterScope(); // Enter procedure scope
-            symbolTable.addSymbol(name.toString(), "PROCEDURE");
+            if (symbolTable != null) {
+                symbolTable.enterScope();
+                symbolTable.addSymbol(name.toString(), "PROCEDURE");
+            }
         :}
         ;
 
-// === FUNCTIONS ===
+// === FUNCTIONS - FIXED: Simplified structure ===
 funcs ::= 
         {: /* epsilon */ :}
         | funcs:fs fdef:f
@@ -108,55 +115,34 @@ funcs ::=
 fdef ::= USER_DEFINED_NAME:name LPAREN param_list:params RPAREN LBRACE body:b algo:a RBRACE
         {: 
             System.out.println("FUNCTION: " + name); 
-            symbolTable.enterScope(); // Enter function scope
-            symbolTable.addSymbol(name.toString(), "FUNCTION");
+            if (symbolTable != null) {
+                symbolTable.enterScope();
+                symbolTable.addSymbol(name.toString(), "FUNCTION");
+            }
         :}
         ;
 
-// === BODY ===
+// === BODY - FIXED: Just the local variables part ===
 body ::= LOCAL LBRACE maxthree:mt RBRACE
-        {: 
-            System.out.println("BODY with locals"); 
-            // Local variables are handled in maxthree
-        :}
+        {: System.out.println("BODY with locals"); :}
         ;
 
 // === MAX THREE PARAMETERS ===
 maxthree ::= 
            {: /* epsilon */ :}
            | USER_DEFINED_NAME:p1 
-            {: 
-                if (symbolTable != null) {
-                    symbolTable.addSymbol(p1.toString(), "PARAM");
-                }
-            :}
            | USER_DEFINED_NAME:p1 USER_DEFINED_NAME:p2 
-            {: 
-                if (symbolTable != null) {
-                    symbolTable.addSymbol(p1.toString(), "PARAM");
-                    symbolTable.addSymbol(p2.toString(), "PARAM");
-                }
-            :}
            | USER_DEFINED_NAME:p1 USER_DEFINED_NAME:p2 USER_DEFINED_NAME:p3
-            {: 
-                if (symbolTable != null) {
-                    symbolTable.addSymbol(p1.toString(), "PARAM");
-                    symbolTable.addSymbol(p2.toString(), "PARAM");
-                    symbolTable.addSymbol(p3.toString(), "PARAM");
-                }
-            :}
            ;
 
 param_list ::= maxthree:mt ;
 
-// === MAIN PROGRAM ===
+// === MAIN PROGRAM - FIXED: use main_variables ===
 main_prog ::= VAR LBRACE main_variables:vars RBRACE algo:algo
-             {: 
-                 System.out.println("MAIN PROGRAM"); 
-             :}
+             {: System.out.println("MAIN PROGRAM"); :}
              ;
 
-// === ALGORITHM ===
+// === ALGORITHM - FIXED: Use instruction list to resolve conflict ===
 algo ::= instr_list:il
         {: System.out.println("ALGO"); :}
        ;
@@ -177,7 +163,7 @@ instr ::= HALT
         | assign:assgn 
         | loop:l 
         | branch:br 
-        | RETURN_KW atom:a
+        | RETURN_KW atom:a   // <<< ADD THIS NEW RULE
           {: System.out.println("INSTR: return " + a); :}
         ;
 
