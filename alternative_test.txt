@@ -1,0 +1,116 @@
+glob { 
+  total 
+  biggest 
+} 
+
+proc { 
+  multiply (a b) { 
+    local {} 
+    print "Multiplying:" ; 
+    print a ; 
+    print b ; 
+    total = ( a mult b ) 
+  }
+
+  countdown (start) { 
+    local { i } 
+    i = start ; 
+    while ( i > 0 ) { 
+      print "Counting:" ; 
+      print i ; 
+      i = ( i minus 1 ) 
+    } 
+  }
+
+  greetuser (username times) { 
+    local { j } 
+    j = 0 ; 
+    while ( times > j ) { 
+      print "Welcome" ; 
+      print username ; 
+      j = ( j plus 1 ) 
+    } 
+  }
+} 
+
+func { 
+  square (n) { 
+    local { s } 
+    s = ( n mult n ) ; 
+    return s 
+  }
+
+  power (base exp) { 
+    local { res i } 
+    res = 1 ; 
+    i = 0 ; 
+    while ( exp > i ) { 
+      res = ( res mult base ) ; 
+      i = ( i plus 1 ) 
+    } ; 
+    return res 
+  }
+
+  ispositive (num) { 
+    local {} 
+    if ( num > 0 ) { 
+      halt 
+    } else { 
+      halt 
+    } ; 
+    return 1 
+  }
+} 
+
+main { 
+  var { x y sq pownum result counter username } 
+
+  x = 4 ; 
+  y = 3 ; 
+  
+  print "Test square:" ; 
+  sq = square ( x ) ; 
+  print sq ; 
+  
+  print "Test power:" ; 
+  pownum = power ( x y ) ; 
+  print pownum ; 
+  
+  print "Test multiply:" ; 
+  multiply ( x y ) ; 
+  print total ; 
+  
+  print "Test greet:" ; 
+  username = 1 ;  // or some numeric code if you want
+  greetuser ( username 2 ) ;
+  
+  print "Test count:" ; 
+  countdown ( 5 ) ; 
+  
+  print "Test cond:" ; 
+  if ( x > y ) { 
+    print "X is >" 
+  } else { 
+    print "Y is >=" 
+  } ; 
+  
+  print "Test unary:" ; 
+  result = ( neg 5 ) ; 
+  print result ; 
+  if ( not ( x eq y ) ) { 
+    print "They are diff" 
+  } else { 
+    print "They are equal" 
+  } ; 
+  
+  print "Test do-until:" ; 
+  counter = 0 ; 
+  do { 
+    print "Loop counter:" ; 
+    print counter ; 
+    counter = ( counter plus 1 ) 
+  } until ( counter > 2 ) ; 
+  
+  print "Tests done!" ; 
+  halt 
+}

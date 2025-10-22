@@ -1,0 +1,151 @@
+glob { 
+  counter 
+  globalresult 
+} 
+
+proc { 
+  increment () { 
+    local {} 
+    counter = ( counter plus 1 ) 
+  }
+  greet (name times) { 
+    local { i } 
+    i = 0 ; 
+    while ( times > i ) { 
+      print "Hello" ; 
+      print name ; 
+      i = ( i plus 1 ) 
+    } 
+  }
+  checknumber (n) { 
+    local {} 
+    if ( n > 10 ) { 
+      print "Big" 
+    } else { 
+      if ( n > 5 ) { 
+        print "Medium" 
+      } else { 
+        print "Small" 
+      } 
+    } 
+  } 
+} 
+
+func { 
+  factorial (x) { 
+    local { result i } 
+    result = 1 ; 
+    i = 1 ; 
+    while ( x > i ) { 
+      result = ( result mult i ) ; 
+      i = ( i plus 1 ) 
+    } ; 
+    return result 
+  }
+  max (a b) { 
+    local {} 
+    if ( a > b ) { 
+      halt 
+    } else { 
+      halt 
+    } ; 
+    return a 
+  }
+  iseven (n) { 
+    local { temp } 
+    temp = ( n div 2 ) ; 
+    temp = ( temp mult 2 ) ; 
+    if ( temp eq n ) { 
+      halt 
+    } else { 
+      halt 
+    } ; 
+    return 1 
+  } 
+} 
+
+main { 
+  var { num1 num2 temp result loopcounter fact3 fact4 } 
+  
+  num1 = 5 ; 
+  num2 = 8 ; 
+  
+  print "Testing fac:" ; 
+  result = factorial ( num1 ) ; 
+  print result ; 
+  
+  print "Testing max:" ; 
+  temp = max ( num1 num2 ) ; 
+  print temp ; 
+  
+  print "Test greet:" ; 
+  greet ( num2 3 ) ; 
+  
+  print "Test checknum:" ; 
+  checknumber ( 7 ) ; 
+  checknumber ( 15 ) ; 
+  checknumber ( 3 ) ; 
+  
+  print "Test iseven:" ; 
+  temp = iseven ( num1 ) ; 
+  print temp ; 
+  temp = iseven ( num2 ) ; 
+  print temp ; 
+  
+  print "Test do-until:" ; 
+  loopcounter = 0 ; 
+  do { 
+    print "Do-until it:" ; 
+    print loopcounter ; 
+    loopcounter = ( loopcounter plus 1 ) 
+  } until ( loopcounter > 2 ) ; 
+  
+  print "Test counter:" ; 
+  print counter ; 
+  
+  print "Test complex:" ; 
+  fact3 = factorial ( 3 ) ; 
+  globalresult = ( ( num1 mult num2 ) plus fact3 ) ; 
+  print globalresult ; 
+  
+  print "Test nested:" ; 
+  fact3 = factorial ( 3 ) ; 
+  fact4 = factorial ( 4 ) ; 
+  temp = max ( fact3 fact4 ) ; 
+  print temp ; 
+  
+  print "Test unary:" ; 
+  temp = ( neg 10 ) ; 
+  print temp ;
+  if ( not ( 3 > 5 ) ) { 
+    print "True" 
+  } else { 
+    print "False" 
+  } ;
+  
+  print "Test compare:" ; 
+  if ( num1 eq num2 ) { 
+    print "Equal" 
+  } else { 
+    print "Not equal" 
+  } ; 
+  
+  if ( num1 > num2 ) { 
+    print "Less than" 
+  } ; 
+  
+  if ( num2 > num1 ) { 
+    print "Greater than" 
+  } ; 
+  
+  print "Test multiple:" ; 
+  num1 = 100 ; 
+  num2 = 200 ; 
+  temp = 300 ; 
+  print num1 ; 
+  print num2 ; 
+  print temp ; 
+  
+  print "completed!" ; 
+  halt 
+}

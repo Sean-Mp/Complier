@@ -1,0 +1,518 @@
+import java_cup.runtime.*;
+import symboltable.SymbolTable;
+import symboltable.Symbol;
+import java.util.*;
+
+// Remove all the individual AST imports - they're all in the same file now
+
+parser code {:
+    private SymbolTable symbolTable = new SymbolTable();
+    private ProgramNode syntaxTree;
+    
+    public SymbolTable getSymbolTable() {
+        return symbolTable;
+    }
+    
+    public ProgramNode getSyntaxTree() {
+        return syntaxTree;
+    }
+    
+    // Helper methods for list creation
+    private List<String> createList(String first) {
+        List<String> list = new ArrayList<>();
+        list.add(first);
+        return list;
+    }
+    
+    private List<String> appendToList(List<String> list, String item) {
+        list.add(item);
+        return list;
+    }
+    
+    private List<ASTNode> createList(ASTNode first) {
+        List<ASTNode> list = new ArrayList<>();
+        list.add(first);
+        return list;
+    }
+    
+    private List<ASTNode> appendToList(List<ASTNode> list, ASTNode item) {
+        list.add(item);
+        return list;
+    }
+    
+    private List<ProcedureNode> createList(ProcedureNode first) {
+        List<ProcedureNode> list = new ArrayList<>();
+        list.add(first);
+        return list;
+    }
+    
+    private List<ProcedureNode> appendToList(List<ProcedureNode> list, ProcedureNode item) {
+        list.add(item);
+        return list;
+    }
+    
+    private List<FunctionNode> createList(FunctionNode first) {
+        List<FunctionNode> list = new ArrayList<>();
+        list.add(first);
+        return list;
+    }
+    
+    private List<FunctionNode> appendToList(List<FunctionNode> list, FunctionNode item) {
+        list.add(item);
+        return list;
+    }
+    
+    // Override syntax error reporting - FIXED
+    public void syntax_error(Symbol cur_token) {
+        System.err.println("Syntax error");
+    }
+    
+    public void report_error(String message, Object info) {
+        System.err.println("Parser Error: " + message);
+    }
+
+    private ASTNode findReturnValue(List<ASTNode> algorithm) {
+        for (ASTNode node : algorithm) {
+            if (node instanceof ReturnNode) {
+                return ((ReturnNode) node).getReturnValue();
+            }
+        }
+        return null; // No return statement found
+    }
+:}
+
+// Terminal symbols - keywords (no type)
+terminal GLOB, PROC, FUNC, MAIN, LOCAL, VAR, RETURN_KW;
+terminal HALT, PRINT, WHILE_KW, DO_KW, UNTIL, IF_KW, ELSE_KW;
+terminal NEG, NOT, EQ, OR, AND, PLUS, MINUS, MULT, DIV;
+terminal GT, ASSIGN_OP, SEMI, LPAREN, RPAREN, LBRACE, RBRACE;
+
+// Terminal symbols - with types (carry values)
+terminal String USER_DEFINED_NAME;
+terminal Integer NUMBER;
+terminal String STRING;
+
+// Non-terminal symbols with types - CORRECTED
+non terminal ProgramNode spl_prog;
+non terminal List<String> variables;
+non terminal List<String> main_variables;
+non terminal List<ProcedureNode> procs;
+non terminal List<FunctionNode> funcs;
+non terminal MainProgramNode main_prog;
+non terminal List<ASTNode> algo;
+non terminal List<ASTNode> instr_list;
+non terminal ASTNode instr;
+non terminal ASTNode assign;
+non terminal ASTNode loop;
+non terminal ASTNode branch;
+non terminal ASTNode output;
+non terminal ASTNode term;
+non terminal ASTNode atom;
+non terminal List<ASTNode> input;
+non terminal List<String> maxthree;
+non terminal List<String> param_list;
+non terminal ProcedureNode pdef;
+non terminal FunctionNode fdef;
+non terminal String unop;
+non terminal String binop;
+non terminal List<String> body;
+non terminal List<String> variable_list;
+non terminal List<String> main_var_list;
+
+// Precedence rules
+precedence left OR;
+precedence left AND;
+precedence left EQ, GT;
+precedence left PLUS, MINUS;
+precedence left MULT, DIV;
+precedence right NEG, NOT;
+
+start with spl_prog;
+
+// === MAIN PROGRAM STRUCTURE ===
+spl_prog ::= GLOB LBRACE variables:vars RBRACE 
+             PROC LBRACE procs:procs RBRACE 
+             FUNC LBRACE funcs:funcs RBRACE 
+             MAIN LBRACE main_prog:main RBRACE
+            {: 
+                System.out.println("VALID SPL PROGRAM");
+                RESULT = new ProgramNode(vars, procs, funcs, main, -1, -1);
+                parser.syntaxTree = (ProgramNode)RESULT;
+            :}
+            ;
+
+// === VARIABLES (for glob section) ===
+variables ::= 
+             {: 
+                 RESULT = new ArrayList<String>(); 
+             :}
+            | variable_list:vl
+            {: 
+                RESULT = vl; 
+            :}
+            ;
+
+variable_list ::= USER_DEFINED_NAME:name 
+                 {: 
+                     System.out.println("GLOBAL VAR: " + name); 
+                     Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
+                     if (s == null) {
+                         System.err.println("Error: Variable '" + name + "' already declared");
+                     }
+                     RESULT = parser.createList(name.toString());
+                 :}
+                | variable_list:vl USER_DEFINED_NAME:name 
+                 {: 
+                     System.out.println("GLOBAL VAR: " + name); 
+                     Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
+                     if (s == null) {
+                         System.err.println("Error: Variable '" + name + "' already declared");
+                     }
+                     RESULT = parser.appendToList(vl, name.toString());
+                 :}
+                ;
+
+// === MAIN VARIABLES ===
+main_variables ::= 
+                 {: 
+                     RESULT = new ArrayList<String>(); 
+                 :}
+                | main_var_list:mvl
+                {: 
+                    RESULT = mvl; 
+                :}
+                ;
+
+main_var_list ::= USER_DEFINED_NAME:name 
+                 {: 
+                     System.out.println("MAIN VAR: " + name); 
+                     Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
+                     if (s == null) {
+                         System.err.println("Error: Variable '" + name + "' already declared");
+                     }
+                     RESULT = parser.createList(name.toString());
+                 :}
+                | main_var_list:mvl USER_DEFINED_NAME:name 
+                 {: 
+                     System.out.println("MAIN VAR: " + name); 
+                     Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
+                     if (s == null) {
+                         System.err.println("Error: Variable '" + name + "' already declared");
+                     }
+                     RESULT = parser.appendToList(mvl, name.toString());
+                 :}
+                ;
+
+// === PROCEDURES ===
+procs ::= 
+        {: 
+            RESULT = new ArrayList<ProcedureNode>(); 
+        :}
+        | procs:ps pdef:p
+        {: 
+            RESULT = parser.appendToList(ps, p); 
+        :}
+        ;
+
+pdef ::= USER_DEFINED_NAME:name 
+         {: 
+             // Add procedure name to symbol table as type-less
+             Symbol procSym = parser.symbolTable.addSymbol(name.toString(), "PROCEDURE");
+             if (procSym != null) {
+                 procSym.setFunction(true);
+                 procSym.setReturnType(null); // Procedures don't return
+             }
+             parser.symbolTable.enterScope(); 
+         :} 
+         LPAREN param_list:params RPAREN 
+         LBRACE body:b algo:a RBRACE
+        {: 
+            System.out.println("PROCEDURE: " + name);
+            List<String> localVars = (List<String>)b;
+            RESULT = new ProcedureNode(name.toString(), params, localVars, a, -1, -1);
+            parser.symbolTable.exitScope();
+        :}
+        ;
+
+// === FUNCTIONS ===
+funcs ::= 
+        {: 
+            RESULT = new ArrayList<FunctionNode>(); 
+        :}
+        | funcs:fs fdef:f
+        {: 
+            RESULT = parser.appendToList(fs, f); 
+        :}
+        ;
+
+fdef ::= USER_DEFINED_NAME:name
+         {: 
+             // Add function name to symbol table as type-less
+             Symbol funcSym = parser.symbolTable.addSymbol(name.toString(), "FUNCTION");
+             if (funcSym != null) {
+                 funcSym.setFunction(true);
+                 funcSym.setReturnType("numeric"); // All functions return numeric
+             }
+             parser.symbolTable.enterScope(); 
+         :} 
+         LPAREN param_list:params RPAREN
+         LBRACE body:b algo:a RBRACE
+        {: 
+            System.out.println("FUNCTION: " + name);
+            List<String> localVars = (List<String>)b;
+            ASTNode returnValue = parser.findReturnValue(a);
+            RESULT = new FunctionNode(name.toString(), params, localVars, a, returnValue, -1, -1);
+            parser.symbolTable.exitScope();
+        :}
+        ;
+
+// === BODY ===
+body ::= LOCAL LBRACE maxthree:mt RBRACE
+        {: 
+            System.out.println("BODY with locals"); 
+            RESULT = mt; // maxthree returns List<String>
+        :}
+        ;
+
+// === MAX THREE PARAMETERS ===
+maxthree ::= 
+           {: 
+               RESULT = new ArrayList<String>(); 
+           :}
+           | USER_DEFINED_NAME:p1 
+            {: 
+                Symbol s = parser.symbolTable.addSymbol(p1.toString(), "numeric");
+                if (s == null) {
+                    System.err.println("Error: Parameter '" + p1 + "' already declared");
+                }
+                RESULT = parser.createList(p1.toString());
+            :}
+           | USER_DEFINED_NAME:p1 USER_DEFINED_NAME:p2 
+            {: 
+                Symbol s1 = parser.symbolTable.addSymbol(p1.toString(), "numeric");
+                Symbol s2 = parser.symbolTable.addSymbol(p2.toString(), "numeric");
+                if (s1 == null || s2 == null) {
+                    System.err.println("Error: Duplicate parameter names");
+                }
+                RESULT = parser.createList(p1.toString());
+                RESULT = parser.appendToList(RESULT, p2.toString());
+            :}
+           | USER_DEFINED_NAME:p1 USER_DEFINED_NAME:p2 USER_DEFINED_NAME:p3
+            {: 
+                Symbol s1 = parser.symbolTable.addSymbol(p1.toString(), "numeric");
+                Symbol s2 = parser.symbolTable.addSymbol(p2.toString(), "numeric");
+                Symbol s3 = parser.symbolTable.addSymbol(p3.toString(), "numeric");
+                if (s1 == null || s2 == null || s3 == null) {
+                    System.err.println("Error: Duplicate parameter names");
+                }
+                RESULT = parser.createList(p1.toString());
+                RESULT = parser.appendToList(RESULT, p2.toString());
+                RESULT = parser.appendToList(RESULT, p3.toString());
+            :}
+           ;
+
+param_list ::= maxthree:mt 
+              {: 
+                  RESULT = mt; 
+              :}
+              ;
+
+// === MAIN PROGRAM ===
+main_prog ::= VAR LBRACE 
+              {: parser.symbolTable.enterScope(); :} 
+              main_variables:vars RBRACE algo:algo
+             {: 
+                 System.out.println("MAIN PROGRAM");
+                 RESULT = new MainProgramNode(vars, algo, -1, -1);
+                 parser.symbolTable.exitScope();
+             :}
+             ;
+
+// === ALGORITHM ===
+algo ::= instr_list:il
+        {: 
+            System.out.println("ALGO"); 
+            RESULT = il;
+        :}
+       ;
+
+instr_list ::= instr:i
+              {: 
+                  System.out.println("SINGLE INSTRUCTION"); 
+                  RESULT = parser.createList(i);
+              :}
+             | instr:i SEMI instr_list:rest
+              {: 
+                  System.out.println("MULTIPLE INSTRUCTIONS"); 
+                  RESULT = parser.appendToList(rest, i);
+              :}
+             ;
+
+// === INSTRUCTIONS ===
+instr ::= HALT 
+         {: 
+             System.out.println("INSTR: halt"); 
+             RESULT = new HaltNode(-1, -1);
+         :}
+        | PRINT output:out 
+         {: 
+             System.out.println("INSTR: print"); 
+             RESULT = out;
+         :}
+        | USER_DEFINED_NAME:name LPAREN input:in RPAREN 
+         {: 
+             System.out.println("INSTR: proc call " + name); 
+             RESULT = new ProcedureCallNode(name.toString(), in, -1, -1);
+         :}
+        | assign:assgn 
+        {: 
+            RESULT = assgn; 
+        :}
+        | loop:l 
+        {: 
+            RESULT = l; 
+        :}
+        | branch:br 
+        {: 
+            RESULT = br; 
+        :}
+        | RETURN_KW atom:a
+          {: 
+              System.out.println("INSTR: return");
+              RESULT = new ReturnNode(a, -1, -1);
+          :}
+        ;
+
+// === ASSIGNMENTS ===
+assign ::= USER_DEFINED_NAME:var ASSIGN_OP USER_DEFINED_NAME:func LPAREN input:in RPAREN 
+          {: 
+              System.out.println("ASSIGN: func call " + var + " = " + func);
+              Symbol s = parser.symbolTable.lookup(var.toString());
+              if (s == null || !s.getType().equals("numeric")) {
+                  System.err.println("Type Error: Variable '" + var + "' must be numeric");
+              }
+              FunctionCallNode funcCall = new FunctionCallNode(func.toString(), in, -1, -1);
+              RESULT = new AssignmentNode(var.toString(), funcCall, true, -1, -1);
+          :}
+         | USER_DEFINED_NAME:var ASSIGN_OP term:t 
+          {: 
+              System.out.println("ASSIGN: " + var + " = expression");
+              Symbol s = parser.symbolTable.lookup(var.toString());
+              if (s == null) {
+                  System.err.println("Type Error: Variable '" + var + "' not declared");
+              }
+              RESULT = new AssignmentNode(var.toString(), t, false, -1, -1);
+          :}
+         ;
+
+// === LOOPS ===
+loop ::= WHILE_KW term:t LBRACE algo:a RBRACE 
+        {: 
+            System.out.println("LOOP: while");
+            RESULT = new LoopNode("while", t, a, -1, -1);
+        :}
+       | DO_KW LBRACE algo:a RBRACE UNTIL term:t 
+        {: 
+            System.out.println("LOOP: do-until");
+            RESULT = new LoopNode("do-until", t, a, -1, -1);
+        :}
+       ;
+
+// === BRANCHES ===
+branch ::= IF_KW term:t LBRACE algo:a RBRACE 
+          {: 
+              System.out.println("BRANCH: if");
+              RESULT = new BranchNode(t, a, null, -1, -1);
+          :}
+         | IF_KW term:t LBRACE algo:a1 RBRACE ELSE_KW LBRACE algo:a2 RBRACE 
+          {: 
+              System.out.println("BRANCH: if-else");
+              RESULT = new BranchNode(t, a1, a2, -1, -1);
+          :}
+         ;
+
+// === OUTPUT ===
+output ::= atom:a 
+          {: 
+              RESULT = new PrintNode(a, false, -1, -1);
+          :}
+         | STRING:s 
+          {: 
+              RESULT = new PrintNode(s, true, -1, -1);
+          :}
+         ;
+
+// === INPUT ===
+input ::= 
+        {: 
+            RESULT = new ArrayList<ASTNode>(); 
+        :}
+        | atom:a1 
+        {: 
+            RESULT = parser.createList(a1); 
+        :}
+        | atom:a1 atom:a2 
+        {: 
+            List<ASTNode> list = parser.createList(a1);
+            RESULT = parser.appendToList(list, a2);
+        :}
+        | atom:a1 atom:a2 atom:a3 
+        {: 
+            List<ASTNode> list = parser.createList(a1);
+            list = parser.appendToList(list, a2);
+            RESULT = parser.appendToList(list, a3);
+        :}
+        ;
+
+// === TERMS ===
+term ::= atom:a 
+        {: 
+            RESULT = a; 
+        :}
+       | LPAREN unop:u term:t RPAREN 
+        {: 
+            System.out.println("TERM: unary op " + u);
+            RESULT = new UnopNode(u, t, -1, -1);
+        :}
+       | LPAREN term:t1 binop:b term:t2 RPAREN 
+        {: 
+            System.out.println("TERM: binary op " + b);
+            RESULT = new BinopNode(b, t1, t2, -1, -1);
+        :}
+       ;
+
+// === ATOMS ===
+atom ::= USER_DEFINED_NAME:name 
+        {: 
+            RESULT = new AtomNode(name, -1, -1);
+        :}
+       | NUMBER:num 
+        {: 
+            RESULT = new AtomNode(num, -1, -1);
+        :}
+       ;
+
+// === OPERATORS ===
+unop ::= NEG 
+        {: RESULT = "neg"; :}
+       | NOT 
+        {: RESULT = "not"; :}
+       ;
+
+binop ::= EQ 
+         {: RESULT = "eq"; :}
+        | GT 
+         {: RESULT = ">"; :}
+        | OR 
+         {: RESULT = "or"; :}
+        | AND 
+         {: RESULT = "and"; :}
+        | PLUS 
+         {: RESULT = "plus"; :}
+        | MINUS 
+         {: RESULT = "minus"; :}
+        | MULT 
+         {: RESULT = "mult"; :}
+        | DIV 
+         {: RESULT = "div"; :}
+        ;
