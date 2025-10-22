@@ -1,0 +1,59 @@
+glob {
+  total
+}
+
+proc {
+  accumulate (value) { 
+    local {} 
+    total = ( total plus value ) 
+  }
+  printstatus (num) { 
+    local {} 
+    if ( num > 0 ) { 
+      print "Positive" 
+    } else { 
+      if ( num eq 0 ) { 
+        print "Zero" 
+      } else { 
+        print "Negative" 
+      } 
+    } 
+  }
+}
+
+func {
+  power (base exponent) { 
+    local { result i } 
+    result = 1 ; 
+    i = 0 ; 
+    while ( exponent > i ) { 
+      result = ( result mult base ) ; 
+      i = ( i plus 1 ) 
+    } ; 
+    return result 
+  }
+}
+
+main {
+  var { base exp result counter }
+  base = 2 ;
+  exp = 3 ;
+  result = power ( base exp ) ;
+  print result ;
+  
+  counter = 0 ;
+  while ( counter > 5 ) { 
+    accumulate ( counter ) ; 
+    printstatus ( counter ) ; 
+    counter = ( counter plus 1 ) 
+  } ;
+  
+  print total ;
+  
+  do { 
+    print "Final countdown" ; 
+    counter = ( counter minus 1 ) 
+  } until ( counter eq 0 ) ;
+  
+  halt
+}

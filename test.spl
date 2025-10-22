@@ -1,0 +1,27 @@
+glob {
+    x y z
+}
+
+proc {
+    proc1 {
+        local a b
+        a = 5
+        b = a + 3
+        print b
+    }
+}
+
+func {
+    add a b {
+        local sum
+        sum = a + b
+        return sum
+    }
+}
+
+main {
+    local result
+    call proc1
+    result = call add 5 7
+    print result
+}

@@ -1,0 +1,58 @@
+glob {
+  empty
+}
+
+proc {
+  noparams () { 
+    local {} 
+    print "No params" 
+  }
+  threeparams (a b c) { 
+    local {} 
+    print a ; 
+    print b ; 
+    print c 
+  }
+}
+
+func {
+  identity (x) { 
+    local {} 
+    return x 
+  }
+  alwayszero () { 
+    local {} 
+    return 0 
+  }
+}
+
+main {
+  var { x y }
+  
+  // Test empty params
+  noparams () ;
+  
+  // Test multiple params
+  threeparams ( 1 2 3 ) ;
+  
+  // Test unary operators
+  x = ( neg 5 ) ;
+  print x ;
+  y = ( not 0 ) ;
+  print y ;
+  
+  // Test complex nested expressions
+  x = ( ( 10 plus ( neg 5 ) ) mult ( 3 div 2 ) ) ;
+  print x ;
+  
+  // Test comparison operators
+  if ( ( 5 > 3 ) and ( 2 eq 2 ) ) { 
+    print "Both true" 
+  } ;
+  
+  if ( ( 1 > 2 ) or ( 3 eq 3 ) ) { 
+    print "One true" 
+  } ;
+  
+  halt
+}

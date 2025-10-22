@@ -1,0 +1,19 @@
+glob {
+  x
+  y
+}
+
+proc {
+}
+
+func {
+}
+
+main {
+  var { a b c }
+  a = 5 ;
+  b = 10 ;
+  c = ( a plus b ) ;
+  print c ;
+  halt
+}
