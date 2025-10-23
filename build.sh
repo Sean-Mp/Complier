@@ -22,7 +22,11 @@ javac -cp "lib/*:out" -d out src/symboltable/*.java
 echo "5. Compiling TypeAnalyzer..."
 javac -cp "lib/*:out" -d out src/TypeAnalyzer.java
 
-echo "6. Compiling everything else..."
+
+echo "6. Compiling CodeGenerator..."
+javac -cp "lib/*:out" -d out src/CodeGenerator.java
+
+echo "7. Compiling everything else..."
 javac -cp "lib/*:out" -d out out/*.java src/Main.java
 
-echo "✅ Build complete! Run with: java -cp \"out:lib/*\" Main"
+echo " Build complete! Run with: java -cp \"out:lib/*\" Main"

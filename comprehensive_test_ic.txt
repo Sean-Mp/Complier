@@ -1,0 +1,122 @@
+REM === SPL INTERMEDIATE CODE ===
+REM Global variables: [counter, globalresult]
+
+REM Stored procedure: increment
+REM Stored procedure: greet
+REM Stored procedure: checknumber
+REM Stored function: factorial
+REM Stored function: max
+REM Stored function: iseven
+
+REM === MAIN PROGRAM ===
+REM Main variables: [num1, num2, temp, result, loopcounter, fact3, fact4]
+
+STOP
+PRINT "completed!"
+PRINT temp
+PRINT num2
+PRINT num1
+temp = 300
+num2 = 200
+num1 = 100
+PRINT "Test multiple:"
+IF num2 > num1 THEN GOTO L0
+GOTO L1
+REM L1
+GOTO L2
+REM L0
+PRINT "Greater than"
+REM L2
+IF num1 > num2 THEN GOTO L3
+GOTO L4
+REM L4
+GOTO L5
+REM L3
+PRINT "Less than"
+REM L5
+IF num1 = num2 THEN GOTO L6
+GOTO L7
+REM L7
+PRINT "Not equal"
+GOTO L8
+REM L6
+PRINT "Equal"
+REM L8
+PRINT "Test compare:"
+IF 3 > 5 THEN GOTO L10
+GOTO L9
+REM L10
+PRINT "False"
+GOTO L11
+REM L9
+PRINT "True"
+REM L11
+PRINT temp
+t0 = -10
+temp = t0
+PRINT "Test unary:"
+PRINT temp
+CALL max
+t1 = RETVAL
+temp = t1
+CALL factorial
+t2 = RETVAL
+fact4 = t2
+CALL factorial
+t3 = RETVAL
+fact3 = t3
+PRINT "Test nested:"
+PRINT globalresult
+t4 = num1 * num2
+t5 = t4 + fact3
+globalresult = t5
+CALL factorial
+t6 = RETVAL
+fact3 = t6
+PRINT "Test complex:"
+PRINT counter
+PRINT "Test counter:"
+REM do-until loop start
+REM L12
+t7 = loopcounter + 1
+loopcounter = t7
+PRINT loopcounter
+PRINT "Do-until it:"
+IF loopcounter > 2 THEN GOTO L13
+GOTO L12
+REM L13
+REM do-until loop end
+loopcounter = 0
+PRINT "Test do-until:"
+PRINT temp
+CALL iseven
+t8 = RETVAL
+temp = t8
+PRINT temp
+CALL iseven
+t9 = RETVAL
+temp = t9
+PRINT "Test iseven:"
+REM Procedure call: checknumber
+CALL checknumber
+REM Procedure call: checknumber
+CALL checknumber
+REM Procedure call: checknumber
+CALL checknumber
+PRINT "Test checknum:"
+REM Procedure call: greet
+CALL greet
+PRINT "Test greet:"
+PRINT temp
+CALL max
+t10 = RETVAL
+temp = t10
+PRINT "Testing max:"
+PRINT result
+CALL factorial
+t11 = RETVAL
+result = t11
+PRINT "Testing fac:"
+num2 = 8
+num1 = 5
+STOP
