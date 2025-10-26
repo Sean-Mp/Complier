@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SPL Intermediate Code</title>
+<style>
+body { font-family: 'Courier New', monospace; background-color: #f5f5f5; padding: 20px; }
+h1 { color: #333; }
+pre { background-color: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 5px; overflow-x: auto; line-height: 1.5; }
+.comment { color: #008000; }
+.keyword { color: #0000ff; font-weight: bold; }
+.label { color: #ff0000; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>SPL Intermediate Code</h1>
+<pre>
+<span class='comment'>REM === SPL INTERMEDIATE CODE ===</span>
+<span class='comment'>REM Global variables: [unused]</span>
+
+
+<span class='comment'>REM === MAIN PROGRAM ===</span>
+<span class='comment'>REM Main variables: [a, b]</span>
+
+<span class='keyword'>PRINT</span> &quot;COMPARISONS&quot;
+a = 10
+b = 5
+<span class='keyword'>PRINT</span> &quot;Equality&quot;
+<span class='keyword'>IF</span> a = b <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L0</span>
+<span class='keyword'>GOTO</span> <span class='label'>L1</span>
+<span class='comment'>REM L1</span>
+<span class='keyword'>PRINT</span> &quot;Not equal&quot;
+<span class='keyword'>GOTO</span> <span class='label'>L2</span>
+<span class='comment'>REM L0</span>
+<span class='keyword'>PRINT</span> &quot;Equal&quot;
+<span class='comment'>REM L2</span>
+<span class='keyword'>PRINT</span> &quot;Same values&quot;
+a = 7
+b = 7
+<span class='keyword'>IF</span> a = b <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L3</span>
+<span class='keyword'>GOTO</span> <span class='label'>L4</span>
+<span class='comment'>REM L4</span>
+<span class='keyword'>PRINT</span> &quot;Not equal&quot;
+<span class='keyword'>GOTO</span> <span class='label'>L5</span>
+<span class='comment'>REM L3</span>
+<span class='keyword'>PRINT</span> &quot;Equal&quot;
+<span class='comment'>REM L5</span>
+<span class='keyword'>PRINT</span> &quot;Greater than&quot;
+a = 10
+b = 5
+<span class='keyword'>IF</span> a &gt; b <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L6</span>
+<span class='keyword'>GOTO</span> <span class='label'>L7</span>
+<span class='comment'>REM L7</span>
+<span class='keyword'>PRINT</span> &quot;a not greater&quot;
+<span class='keyword'>GOTO</span> <span class='label'>L8</span>
+<span class='comment'>REM L6</span>
+<span class='keyword'>PRINT</span> &quot;a greater&quot;
+<span class='comment'>REM L8</span>
+<span class='keyword'>PRINT</span> &quot;Not greater&quot;
+a = 3
+b = 8
+<span class='keyword'>IF</span> a &gt; b <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L9</span>
+<span class='keyword'>GOTO</span> <span class='label'>L10</span>
+<span class='comment'>REM L10</span>
+<span class='keyword'>PRINT</span> &quot;a not greater&quot;
+<span class='keyword'>GOTO</span> <span class='label'>L11</span>
+<span class='comment'>REM L9</span>
+<span class='keyword'>PRINT</span> &quot;a greater&quot;
+<span class='comment'>REM L11</span>
+<span class='keyword'>PRINT</span> &quot;DONE&quot;
+<span class='keyword'>STOP</span>
+</pre>
+</body>
+</html>

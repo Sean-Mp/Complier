@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SPL Intermediate Code</title>
+<style>
+body { font-family: 'Courier New', monospace; background-color: #f5f5f5; padding: 20px; }
+h1 { color: #333; }
+pre { background-color: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 5px; overflow-x: auto; line-height: 1.5; }
+.comment { color: #008000; }
+.keyword { color: #0000ff; font-weight: bold; }
+.label { color: #ff0000; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>SPL Intermediate Code</h1>
+<pre>
+<span class='comment'>REM === SPL INTERMEDIATE CODE ===</span>
+<span class='comment'>REM Global variables: [unused]</span>
+
+<span class='comment'>REM Stored procedure: doublex</span>
+<span class='comment'>REM Stored procedure: addtwo</span>
+<span class='comment'>REM Stored procedure: complexcalc</span>
+<span class='comment'>REM Stored procedure: nested</span>
+<span class='comment'>REM Stored function: compute</span>
+
+<span class='comment'>REM === MAIN PROGRAM ===</span>
+<span class='comment'>REM Main variables: [result1, result2, result3, result4, result5]</span>
+
+<span class='keyword'>PRINT</span> &quot;PROCEDURE TESTS&quot;
+<span class='keyword'>PRINT</span> &quot;Test doublex&quot;
+<span class='comment'>REM Inlining procedure: doublex</span>
+t0 = 5 * 2
+result1 = t0
+<span class='keyword'>PRINT</span> result1
+<span class='keyword'>PRINT</span> &quot;Test addtwo&quot;
+<span class='comment'>REM Inlining procedure: addtwo</span>
+t1 = 7 + 8
+result2 = t1
+<span class='keyword'>PRINT</span> result2
+<span class='keyword'>PRINT</span> &quot;Test complex&quot;
+<span class='comment'>REM Inlining procedure: complexcalc</span>
+v2 = 0
+v3 = 0
+t4 = 2 * 2
+v2 = t4
+t5 = 3 * 3
+v3 = t5
+t6 = v2 + v3
+t7 = t6 + 10
+result3 = t7
+<span class='keyword'>PRINT</span> result3
+<span class='keyword'>PRINT</span> &quot;Test nested&quot;
+<span class='comment'>REM Inlining procedure: nested</span>
+v8 = 0
+t9 = 6 * 2
+v8 = t9
+t10 = v8 + 6
+result4 = t10
+<span class='keyword'>PRINT</span> result4
+<span class='keyword'>PRINT</span> &quot;FUNCTION TEST&quot;
+v11 = 0
+v12 = 0
+r13 = 0
+t14 = 4 * 2
+v11 = t14
+t15 = v11 + 5
+v12 = t15
+r13 = v12
+result5 = r13
+<span class='keyword'>PRINT</span> result5
+<span class='keyword'>PRINT</span> &quot;DONE&quot;
+<span class='keyword'>STOP</span>
+</pre>
+</body>
+</html>

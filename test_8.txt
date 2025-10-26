@@ -1,0 +1,33 @@
+glob { 
+  unused
+} 
+
+proc { 
+} 
+
+func { 
+  factorial (x) {
+    local { result i } 
+    result = 1 ; 
+    i = 1 ; 
+    while ( x > i ) { 
+        result = ( result mult i ) ;
+        i = ( i plus 1 )
+    } ;
+    result = ( result mult x ) ;
+    return result 
+    }
+} 
+
+main { 
+  var { result }
+  
+  print "FUNC LOOP" ;
+  
+  print "Factorial" ;
+  result = factorial ( 5 ) ;
+  print result ;
+  
+  print "DONE" ;
+  halt
+}

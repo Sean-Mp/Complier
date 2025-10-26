@@ -6,51 +6,70 @@ proc {
 } 
 
 func { 
-  doublex (n) {
+  absolute (n) {
     local { output }
-    output = ( n mult 2 ) ;
+    if ( n > 0 ) {
+      output = n
+    } else {
+      output = ( neg n )
+    } ;
     return output
   }
   
-  addtwo (a b) {
-    local { sumval }
-    sumval = ( a plus b ) ;
-    return sumval
+  maximum (a b) {
+    local { output }
+    if ( a > b ) {
+      output = a
+    } else {
+      output = b
+    } ;
+    return output
   }
   
-  nested (x) {
-    local { val1 val2 }
-    val1 = doublex ( x ) ;
-    val2 = addtwo ( val1 x ) ;
-    return val2
-  }
-  
-  multifunc (a b) {
-    local { temp1 temp2 result }
-    temp1 = doublex ( a ) ;
-    temp2 = doublex ( b ) ;
-    result = addtwo ( temp1 temp2 ) ;
-    return result
+  sign (n) {
+    local { output }
+    if ( n > 0 ) {
+      output = 1
+    } else {
+      if ( n eq 0 ) {
+        output = 0
+      } else {
+        output = ( neg 1 )
+      }
+    } ;
+    return output
   }
 } 
 
 main { 
-  var { result temp1 temp2 }
+  var { result temp }
   
-  print "NESTED FUNCS" ;
+  print "FUNC COND" ;
   
-  print "Simple nested" ;
-  result = nested ( 5 ) ;
+  print "Absolute pos" ;
+  result = absolute ( 15 ) ;
   print result ;
   
-  print "Multi nested" ;
-  result = multifunc ( 3 4 ) ;
+  print "Absolute neg" ;
+  temp = ( neg 15 );
+  result = absolute ( temp ) ;
+  print result ;
+
+  print "Maximum" ;
+  result = maximum ( 10 25 ) ;
   print result ;
   
-  print "Nested expr" ;
-  temp1 = addtwo ( 1 2 ) ;
-  temp2 = addtwo ( 3 4 ) ;
-  result = addtwo ( temp1 temp2 ) ;
+  print "Sign pos" ;
+  result = sign ( 10 ) ;
+  print result ;
+
+  print "Sign zero" ;
+  result = sign ( 0 ) ;
+  print result ;
+
+  print "Sign neg" ;
+  temp = ( neg 10 ) ;
+  result = sign ( temp ) ;
   print result ;
   
   print "DONE" ;

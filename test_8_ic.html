@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SPL Intermediate Code</title>
+<style>
+body { font-family: 'Courier New', monospace; background-color: #f5f5f5; padding: 20px; }
+h1 { color: #333; }
+pre { background-color: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 5px; overflow-x: auto; line-height: 1.5; }
+.comment { color: #008000; }
+.keyword { color: #0000ff; font-weight: bold; }
+.label { color: #ff0000; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>SPL Intermediate Code</h1>
+<pre>
+<span class='comment'>REM === SPL INTERMEDIATE CODE ===</span>
+<span class='comment'>REM Global variables: [unused]</span>
+
+<span class='comment'>REM Stored function: factorial</span>
+
+<span class='comment'>REM === MAIN PROGRAM ===</span>
+<span class='comment'>REM Main variables: [result]</span>
+
+<span class='keyword'>PRINT</span> &quot;FUNC LOOP&quot;
+<span class='keyword'>PRINT</span> &quot;Factorial&quot;
+v0 = 0
+v1 = 0
+r2 = 0
+v0 = 1
+v1 = 1
+<span class='comment'>REM L0</span>
+<span class='keyword'>IF</span> 5 &gt; v1 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L1</span>
+<span class='keyword'>GOTO</span> <span class='label'>L2</span>
+<span class='comment'>REM L1</span>
+t3 = v0 * v1
+v0 = t3
+t4 = v1 + 1
+v1 = t4
+<span class='keyword'>GOTO</span> <span class='label'>L0</span>
+<span class='comment'>REM L2</span>
+t5 = v0 * 5
+v0 = t5
+r2 = v0
+result = r2
+<span class='keyword'>PRINT</span> result
+<span class='keyword'>PRINT</span> &quot;DONE&quot;
+<span class='keyword'>STOP</span>
+</pre>
+</body>
+</html>

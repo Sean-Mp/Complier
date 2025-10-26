@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SPL Intermediate Code</title>
+<style>
+body { font-family: 'Courier New', monospace; background-color: #f5f5f5; padding: 20px; }
+h1 { color: #333; }
+pre { background-color: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 5px; overflow-x: auto; line-height: 1.5; }
+.comment { color: #008000; }
+.keyword { color: #0000ff; font-weight: bold; }
+.label { color: #ff0000; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>SPL Intermediate Code</h1>
+<pre>
+<span class='comment'>REM === SPL INTERMEDIATE CODE ===</span>
+<span class='comment'>REM Global variables: [unused]</span>
+
+
+<span class='comment'>REM === MAIN PROGRAM ===</span>
+<span class='comment'>REM Main variables: [a, b, c, result]</span>
+
+<span class='keyword'>PRINT</span> &quot;ARITHMETIC&quot;
+<span class='keyword'>PRINT</span> &quot;Addition&quot;
+a = 10
+b = 5
+t0 = a + b
+c = t0
+<span class='keyword'>PRINT</span> a
+<span class='keyword'>PRINT</span> b
+<span class='keyword'>PRINT</span> c
+<span class='keyword'>PRINT</span> &quot;Subtraction&quot;
+t1 = a - b
+c = t1
+<span class='keyword'>PRINT</span> c
+<span class='keyword'>PRINT</span> &quot;Multiplication&quot;
+t2 = a * b
+c = t2
+<span class='keyword'>PRINT</span> c
+<span class='keyword'>PRINT</span> &quot;Division&quot;
+t3 = a / b
+c = t3
+<span class='keyword'>PRINT</span> c
+<span class='keyword'>PRINT</span> &quot;Complex expr&quot;
+t4 = a * 2
+t5 = b * 3
+t6 = t4 + t5
+result = t6
+<span class='keyword'>PRINT</span> result
+<span class='keyword'>PRINT</span> &quot;DONE&quot;
+<span class='keyword'>STOP</span>
+</pre>
+</body>
+</html>

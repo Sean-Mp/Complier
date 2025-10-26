@@ -1,0 +1,68 @@
+glob { 
+  unused
+} 
+
+proc { 
+} 
+
+func { 
+  divide (a b) {
+    local { quotient }
+    quotient = ( a div b ) ;
+    return quotient
+  }
+} 
+
+main { 
+  var { a b c temp result }
+  
+  print "EDGE CASES" ;
+  
+  print "Zero" ;
+  a = 0 ;
+  print a ;
+  if ( a eq 0 ) {
+    print "detected"
+  } ;
+  
+  print "Negatives" ;
+  a = ( neg 50 ) ;
+  print a ;
+  b = ( neg ( neg 25 ) ) ;
+  print b ;
+  
+  print "Division" ;
+  result = divide ( 10 3 ) ;
+  print result ;
+  
+  print "Large values" ;
+  a = 999 ;
+  b = 888 ;
+  c = ( a plus b ) ;
+  print c ;
+  
+  print "Var reuse" ;
+  temp = 111 ;
+  print temp ;
+  temp = 222 ;
+  print temp ;
+  temp = 333 ;
+  print temp ;
+  
+  print "Multi assign" ;
+  a = 1 ;
+  a = ( a plus 1 ) ;
+  a = ( a plus 1 ) ;
+  a = ( a plus 1 ) ;
+  print a ;
+  
+  print "Empty if" ;
+  a = 5 ;
+  if ( a > 10 ) {
+    print "No print"
+  } ;
+  print "After empty" ;
+  
+  print "DONE" ;
+  halt
+}

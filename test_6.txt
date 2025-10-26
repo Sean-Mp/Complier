@@ -1,88 +1,66 @@
 glob { 
-  globalvar
+  unused
 } 
 
 proc { 
-  noparams () {
+  doublex (n result) {
     local {}
-    print "No params"
+    result = ( n mult 2 )
   }
   
-  oneparam (x) {
+  addtwo (a b result) {
     local {}
-    print "One param" ;
-    print x
+    result = ( a plus b )
   }
   
-  twoparams (a b) {
-    local {}
-    print "Two params" ;
-    print a ;
-    print b
+  complexcalc (x y z) {
+    local { temp1 temp2 }
+    temp1 = ( x mult 2 ) ;
+    temp2 = ( y mult 3 ) ;
+    z = ( ( temp1 plus temp2 ) plus 10 )
   }
   
-  threeparams (x y z) {
-    local { sumval }
-    sumval = ( ( x plus y ) plus z ) ;
-    print "Three" ;
-    print sumval
-  }
-  
-  modifyglobal () {
-    local {}
-    print "Before mod:" ;
-    print globalvar ;
-    globalvar = 999 ;
-    print "After mod:" ;
-    print globalvar
+  nested (x result) {
+    local { temp }
+    temp = ( x mult 2 ) ;
+    result = ( temp plus x )
   }
 } 
 
-func { 
-  addtwo (a b) {
-    local { result }
-    result = ( a plus b ) ;
-    print "Adding numbers:" ;
-    print result ;
-    return result
+func {
+  compute (a b) {
+    local { doubled sum }
+    doubled = ( a mult 2 ) ;
+    sum = ( doubled plus b ) ;
+    return sum
   }
 } 
 
 main { 
-  var { a b temp1 temp2 }
-
-  print "PROCEDURES" ;
-
-  print "No params" ;
-  noparams ( ) ;
-
-  print "One param" ;
-  oneparam ( 42 ) ;
-
-  print "Two params" ;
-  twoparams ( 10 20 ) ;
-
-  print "Three params" ;
-  threeparams ( 1 2 3 ) ;
-
-  print "Expr args" ;
-  a = 5 ;
-  b = 3 ;
-  temp1 = ( a plus b ) ;
-  temp2 = ( a mult b ) ;
-  twoparams ( temp1 temp2 ) ;
-
-  print "Global mod" ;
-  globalvar = 100 ;
-  print globalvar ;
-  modifyglobal ( ) ;
-  print globalvar ;
-
-  print "Function test" ;
-  a = addtwo ( 4 6 ) ;
-  print "Sum result:" ;
-  print a ;
-
+  var { result1 result2 result3 result4 result5 }
+  
+  print "PROCEDURE TESTS" ;
+  
+  print "Test doublex" ;
+  doublex ( 5 result1 ) ;
+  print result1 ;
+  
+  print "Test addtwo" ;
+  addtwo ( 7 8 result2 ) ;
+  print result2 ;
+  
+  print "Test complex" ;
+  complexcalc ( 2 3 result3 ) ;
+  print result3 ;
+  
+  print "Test nested" ;
+  nested ( 6 result4 ) ;
+  print result4 ;
+  
+  print "FUNCTION TEST" ;
+  result5 = compute ( 4 5 ) ;
+  print result5 ;
+  
   print "DONE" ;
   halt
 }

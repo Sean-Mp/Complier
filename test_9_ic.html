@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SPL Intermediate Code</title>
+<style>
+body { font-family: 'Courier New', monospace; background-color: #f5f5f5; padding: 20px; }
+h1 { color: #333; }
+pre { background-color: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 5px; overflow-x: auto; line-height: 1.5; }
+.comment { color: #008000; }
+.keyword { color: #0000ff; font-weight: bold; }
+.label { color: #ff0000; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>SPL Intermediate Code</h1>
+<pre>
+<span class='comment'>REM === SPL INTERMEDIATE CODE ===</span>
+<span class='comment'>REM Global variables: [unused]</span>
+
+<span class='comment'>REM Stored function: divide</span>
+
+<span class='comment'>REM === MAIN PROGRAM ===</span>
+<span class='comment'>REM Main variables: [a, b, c, temp, result]</span>
+
+<span class='keyword'>PRINT</span> &quot;EDGE CASES&quot;
+<span class='keyword'>PRINT</span> &quot;Zero&quot;
+a = 0
+<span class='keyword'>PRINT</span> a
+<span class='keyword'>IF</span> a = 0 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L0</span>
+<span class='keyword'>GOTO</span> <span class='label'>L1</span>
+<span class='comment'>REM L1</span>
+<span class='keyword'>GOTO</span> <span class='label'>L2</span>
+<span class='comment'>REM L0</span>
+<span class='keyword'>PRINT</span> &quot;detected&quot;
+<span class='comment'>REM L2</span>
+<span class='keyword'>PRINT</span> &quot;Negatives&quot;
+t0 = -50
+a = t0
+<span class='keyword'>PRINT</span> a
+t1 = -25
+t2 = -t1
+b = t2
+<span class='keyword'>PRINT</span> b
+<span class='keyword'>PRINT</span> &quot;Division&quot;
+v3 = 0
+r4 = 0
+t5 = 10 / 3
+v3 = t5
+r4 = v3
+result = r4
+<span class='keyword'>PRINT</span> result
+<span class='keyword'>PRINT</span> &quot;Large values&quot;
+a = 999
+b = 888
+t6 = a + b
+c = t6
+<span class='keyword'>PRINT</span> c
+<span class='keyword'>PRINT</span> &quot;Var reuse&quot;
+temp = 111
+<span class='keyword'>PRINT</span> temp
+temp = 222
+<span class='keyword'>PRINT</span> temp
+temp = 333
+<span class='keyword'>PRINT</span> temp
+<span class='keyword'>PRINT</span> &quot;Multi assign&quot;
+a = 1
+t7 = a + 1
+a = t7
+t8 = a + 1
+a = t8
+t9 = a + 1
+a = t9
+<span class='keyword'>PRINT</span> a
+<span class='keyword'>PRINT</span> &quot;Empty if&quot;
+a = 5
+<span class='keyword'>IF</span> a &gt; 10 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L3</span>
+<span class='keyword'>GOTO</span> <span class='label'>L4</span>
+<span class='comment'>REM L4</span>
+<span class='keyword'>GOTO</span> <span class='label'>L5</span>
+<span class='comment'>REM L3</span>
+<span class='keyword'>PRINT</span> &quot;No print&quot;
+<span class='comment'>REM L5</span>
+<span class='keyword'>PRINT</span> &quot;After empty&quot;
+<span class='keyword'>PRINT</span> &quot;DONE&quot;
+<span class='keyword'>STOP</span>
+</pre>
+</body>
+</html>

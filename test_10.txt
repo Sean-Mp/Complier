@@ -1,0 +1,49 @@
+glob { 
+  unused
+} 
+
+proc { 
+} 
+
+func { 
+} 
+
+main { 
+  var { a temp }
+  
+  print "UNARY OPS" ;
+  
+  print "Negation" ;
+  temp = ( neg 42 ) ;
+  print temp ;
+  
+  print "Double neg" ;
+  temp = ( neg ( neg 30 ) ) ;
+  print temp ;
+  
+  print "NOT true" ;
+  a = 10 ;
+  if ( not ( a > 100 ) ) {
+    print "NOT true"
+  } else {
+    print "NOT false"
+  } ;
+  
+  print "NOT false" ;
+  if ( not ( a > 5 ) ) {
+    print "NOT true"
+  } else {
+    print "NOT false"
+  } ;
+  
+  print "NOT in expr" ;
+  a = 3 ;
+  if ( not ( ( a > 5 ) and ( a > 0 ) ) ) {
+    print "NOT true"
+  } else {
+    print "NOT false"
+  } ;
+  
+  print "DONE" ;
+  halt
+}
