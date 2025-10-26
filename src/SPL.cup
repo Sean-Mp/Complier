@@ -135,7 +135,7 @@ spl_prog ::= GLOB LBRACE variables:vars RBRACE
              FUNC LBRACE funcs:funcs RBRACE 
              MAIN LBRACE main_prog:main RBRACE
             {: 
-                System.out.println("VALID SPL PROGRAM");
+                //System.out.println("VALID SPL PROGRAM");
                 RESULT = new ProgramNode(vars, procs, funcs, main, -1, -1);
                 parser.syntaxTree = (ProgramNode)RESULT;
             :}
@@ -154,7 +154,7 @@ variables ::=
 
 variable_list ::= USER_DEFINED_NAME:name 
                  {: 
-                     System.out.println("GLOBAL VAR: " + name); 
+                     //System.out.println("GLOBAL VAR: " + name); 
                      Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
                      if (s == null) {
                          System.err.println("Error: Variable '" + name + "' already declared");
@@ -163,7 +163,7 @@ variable_list ::= USER_DEFINED_NAME:name
                  :}
                 | variable_list:vl USER_DEFINED_NAME:name 
                  {: 
-                     System.out.println("GLOBAL VAR: " + name); 
+                     //System.out.println("GLOBAL VAR: " + name); 
                      Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
                      if (s == null) {
                          System.err.println("Error: Variable '" + name + "' already declared");
@@ -185,7 +185,7 @@ main_variables ::=
 
 main_var_list ::= USER_DEFINED_NAME:name 
                  {: 
-                     System.out.println("MAIN VAR: " + name); 
+                     //System.out.println("MAIN VAR: " + name); 
                      Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
                      if (s == null) {
                          System.err.println("Error: Variable '" + name + "' already declared");
@@ -194,7 +194,7 @@ main_var_list ::= USER_DEFINED_NAME:name
                  :}
                 | main_var_list:mvl USER_DEFINED_NAME:name 
                  {: 
-                     System.out.println("MAIN VAR: " + name); 
+                     //System.out.println("MAIN VAR: " + name); 
                      Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
                      if (s == null) {
                          System.err.println("Error: Variable '" + name + "' already declared");
@@ -227,7 +227,7 @@ pdef ::= USER_DEFINED_NAME:name
          LPAREN param_list:params RPAREN 
          LBRACE body:b algo:a RBRACE
         {: 
-            System.out.println("PROCEDURE: " + name);
+            //System.out.println("PROCEDURE: " + name);
             List<String> localVars = (List<String>)b;
             RESULT = new ProcedureNode(name.toString(), params, localVars, a, -1, -1);
             parser.symbolTable.exitScope();
@@ -258,7 +258,7 @@ fdef ::= USER_DEFINED_NAME:name
          LPAREN param_list:params RPAREN
          LBRACE body:b algo:a RBRACE
         {: 
-            System.out.println("FUNCTION: " + name);
+            //System.out.println("FUNCTION: " + name);
             List<String> localVars = (List<String>)b;
             ASTNode returnValue = parser.findReturnValue(a);
             RESULT = new FunctionNode(name.toString(), params, localVars, a, returnValue, -1, -1);
@@ -269,7 +269,7 @@ fdef ::= USER_DEFINED_NAME:name
 // === BODY ===
 body ::= LOCAL LBRACE maxthree:mt RBRACE
         {: 
-            System.out.println("BODY with locals"); 
+            //System.out.println("BODY with locals"); 
             RESULT = mt; // maxthree returns List<String>
         :}
         ;
@@ -322,7 +322,7 @@ main_prog ::= VAR LBRACE
               {: parser.symbolTable.enterScope(); :} 
               main_variables:vars RBRACE algo:algo
              {: 
-                 System.out.println("MAIN PROGRAM");
+                 //System.out.println("MAIN PROGRAM");
                  RESULT = new MainProgramNode(vars, algo, -1, -1);
                  parser.symbolTable.exitScope();
              :}
@@ -331,37 +331,40 @@ main_prog ::= VAR LBRACE
 // === ALGORITHM ===
 algo ::= instr_list:il
         {: 
-            System.out.println("ALGO"); 
+            //System.out.println("ALGO"); 
             RESULT = il;
         :}
        ;
 
 instr_list ::= instr:i
               {: 
-                  System.out.println("SINGLE INSTRUCTION"); 
+                  //System.out.println("SINGLE INSTRUCTION"); 
                   RESULT = parser.createList(i);
               :}
              | instr:i SEMI instr_list:rest
               {: 
-                  System.out.println("MULTIPLE INSTRUCTIONS"); 
-                  RESULT = parser.appendToList(rest, i);
+                  //System.out.println("MULTIPLE INSTRUCTIONS"); 
+                  List<ASTNode> result = new ArrayList<>();
+                  result.add(i);           // Add current instruction FIRST
+                  result.addAll(rest);     // Then add the rest
+                  RESULT = result;
               :}
              ;
 
 // === INSTRUCTIONS ===
 instr ::= HALT 
          {: 
-             System.out.println("INSTR: halt"); 
+             //System.out.println("INSTR: halt"); 
              RESULT = new HaltNode(-1, -1);
          :}
         | PRINT output:out 
          {: 
-             System.out.println("INSTR: print"); 
+             //System.out.println("INSTR: print"); 
              RESULT = out;
          :}
         | USER_DEFINED_NAME:name LPAREN input:in RPAREN 
          {: 
-             System.out.println("INSTR: proc call " + name); 
+             //System.out.println("INSTR: proc call " + name); 
              RESULT = new ProcedureCallNode(name.toString(), in, -1, -1);
          :}
         | assign:assgn 
@@ -378,7 +381,7 @@ instr ::= HALT
         :}
         | RETURN_KW atom:a
           {: 
-              System.out.println("INSTR: return");
+              //System.out.println("INSTR: return");
               RESULT = new ReturnNode(a, -1, -1);
           :}
         ;
@@ -386,7 +389,7 @@ instr ::= HALT
 // === ASSIGNMENTS ===
 assign ::= USER_DEFINED_NAME:var ASSIGN_OP USER_DEFINED_NAME:func LPAREN input:in RPAREN 
           {: 
-              System.out.println("ASSIGN: func call " + var + " = " + func);
+              //System.out.println("ASSIGN: func call " + var + " = " + func);
               Symbol s = parser.symbolTable.lookup(var.toString());
               if (s == null || !s.getType().equals("numeric")) {
                   System.err.println("Type Error: Variable '" + var + "' must be numeric");
@@ -396,7 +399,7 @@ assign ::= USER_DEFINED_NAME:var ASSIGN_OP USER_DEFINED_NAME:func LPAREN input:i
           :}
          | USER_DEFINED_NAME:var ASSIGN_OP term:t 
           {: 
-              System.out.println("ASSIGN: " + var + " = expression");
+              //System.out.println("ASSIGN: " + var + " = expression");
               Symbol s = parser.symbolTable.lookup(var.toString());
               if (s == null) {
                   System.err.println("Type Error: Variable '" + var + "' not declared");
@@ -408,12 +411,12 @@ assign ::= USER_DEFINED_NAME:var ASSIGN_OP USER_DEFINED_NAME:func LPAREN input:i
 // === LOOPS ===
 loop ::= WHILE_KW term:t LBRACE algo:a RBRACE 
         {: 
-            System.out.println("LOOP: while");
+            //System.out.println("LOOP: while");
             RESULT = new LoopNode("while", t, a, -1, -1);
         :}
        | DO_KW LBRACE algo:a RBRACE UNTIL term:t 
         {: 
-            System.out.println("LOOP: do-until");
+            //System.out.println("LOOP: do-until");
             RESULT = new LoopNode("do-until", t, a, -1, -1);
         :}
        ;
@@ -421,12 +424,12 @@ loop ::= WHILE_KW term:t LBRACE algo:a RBRACE
 // === BRANCHES ===
 branch ::= IF_KW term:t LBRACE algo:a RBRACE 
           {: 
-              System.out.println("BRANCH: if");
+              //System.out.println("BRANCH: if");
               RESULT = new BranchNode(t, a, null, -1, -1);
           :}
          | IF_KW term:t LBRACE algo:a1 RBRACE ELSE_KW LBRACE algo:a2 RBRACE 
           {: 
-              System.out.println("BRANCH: if-else");
+              //System.out.println("BRANCH: if-else");
               RESULT = new BranchNode(t, a1, a2, -1, -1);
           :}
          ;
@@ -471,12 +474,12 @@ term ::= atom:a
         :}
        | LPAREN unop:u term:t RPAREN 
         {: 
-            System.out.println("TERM: unary op " + u);
+            //System.out.println("TERM: unary op " + u);
             RESULT = new UnopNode(u, t, -1, -1);
         :}
        | LPAREN term:t1 binop:b term:t2 RPAREN 
         {: 
-            System.out.println("TERM: binary op " + b);
+            //System.out.println("TERM: binary op " + b);
             RESULT = new BinopNode(b, t1, t2, -1, -1);
         :}
        ;

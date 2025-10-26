@@ -1,0 +1,63 @@
+glob { 
+  unused
+} 
+
+proc { 
+} 
+
+func { 
+} 
+
+main { 
+  var { a b }
+  
+  print "BOOLEAN LOGIC" ;
+  
+  a = 10 ;
+  b = 5 ;
+  
+  print "AND both true" ;
+  if ( ( a > 5 ) and ( b > 3 ) ) {
+    print "Both true"
+  } else {
+    print "One false"
+  } ;
+  
+  print "AND one false" ;
+  if ( ( a > 100 ) and ( b > 3 ) ) {
+    print "Both true"
+  } else {
+    print "One false"
+  } ;
+  
+  print "OR one true" ;
+  if ( ( a > 100 ) or ( b > 3 ) ) {
+    print "One true"
+  } else {
+    print "Both false"
+  } ;
+  
+  print "OR both false" ;
+  if ( ( a > 100 ) or ( b > 100 ) ) {
+    print "One true"
+  } else {
+    print "Both false"
+  } ;
+  
+  print "NOT operator" ;
+  if ( not ( a eq b ) ) {
+    print "NOT equal true"
+  } else {
+    print "NOT equal false"
+  } ;
+  
+  print "Complex" ;
+  if ( ( ( a > 5 ) and ( b > 3 ) ) or ( a eq 100 ) ) {
+    print "Complex true"
+  } else {
+    print "Complex false"
+  } ;
+  
+  print "DONE" ;
+  halt
+}

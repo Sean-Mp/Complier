@@ -20,7 +20,7 @@ import java_cup.runtime.*;
 %}
 
 LineTerminator = \r|\n|\r\n
-WhiteSpace = {LineTerminator} | [ \t\f]
+WhiteSpace = [ \t\r\n\u000B\u000C\u0085\u00A0\u2028\u2029]
 Identifier = [a-z][a-z0-9]*
 Number = 0 | [1-9][0-9]*
 String = \"[^\"]{1,15}\"

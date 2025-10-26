@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SPL Intermediate Code</title>
+<style>
+body { font-family: 'Courier New', monospace; background-color: #f5f5f5; padding: 20px; }
+h1 { color: #333; }
+pre { background-color: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 5px; overflow-x: auto; line-height: 1.5; }
+.comment { color: #008000; }
+.keyword { color: #0000ff; font-weight: bold; }
+.label { color: #ff0000; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>SPL Intermediate Code</h1>
+<pre>
+<span class='comment'>REM === SPL INTERMEDIATE CODE ===</span>
+<span class='comment'>REM Global variables: [unused]</span>
+
+
+<span class='comment'>REM === MAIN PROGRAM ===</span>
+<span class='comment'>REM Main variables: [counter, x, y, temp]</span>
+
+<span class='keyword'>PRINT</span> &quot;WHILE LOOPS&quot;
+<span class='keyword'>PRINT</span> &quot;Basic while&quot;
+counter = 0
+<span class='comment'>REM while loop start</span>
+<span class='comment'>REM L0</span>
+<span class='keyword'>IF</span> counter = 3 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L2</span>
+<span class='keyword'>GOTO</span> <span class='label'>L1</span>
+<span class='comment'>REM L1</span>
+<span class='keyword'>PRINT</span> counter
+t0 = counter + 1
+counter = t0
+<span class='keyword'>GOTO</span> <span class='label'>L0</span>
+<span class='comment'>REM L2</span>
+<span class='comment'>REM while loop end</span>
+<span class='keyword'>PRINT</span> &quot;After while&quot;
+<span class='keyword'>PRINT</span> &quot;Nested while&quot;
+x = 0
+<span class='comment'>REM while loop start</span>
+<span class='comment'>REM L3</span>
+<span class='keyword'>IF</span> x = 2 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L5</span>
+<span class='keyword'>GOTO</span> <span class='label'>L4</span>
+<span class='comment'>REM L4</span>
+y = 0
+<span class='comment'>REM while loop start</span>
+<span class='comment'>REM L6</span>
+<span class='keyword'>IF</span> y = 2 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L8</span>
+<span class='keyword'>GOTO</span> <span class='label'>L7</span>
+<span class='comment'>REM L7</span>
+t1 = x * 10
+t2 = t1 + y
+temp = t2
+<span class='keyword'>PRINT</span> temp
+t3 = y + 1
+y = t3
+<span class='keyword'>GOTO</span> <span class='label'>L6</span>
+<span class='comment'>REM L8</span>
+<span class='comment'>REM while loop end</span>
+t4 = x + 1
+x = t4
+<span class='keyword'>GOTO</span> <span class='label'>L3</span>
+<span class='comment'>REM L5</span>
+<span class='comment'>REM while loop end</span>
+<span class='keyword'>PRINT</span> &quot;After nested&quot;
+<span class='keyword'>PRINT</span> &quot;DONE&quot;
+<span class='keyword'>STOP</span>
+</pre>
+</body>
+</html>

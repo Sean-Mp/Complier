@@ -1,0 +1,4 @@
+# Zone.Identifier files from Windows/WSL
+*.Zone.Identifier
+:Zone.Identifier
+__ZoneIdentifier*

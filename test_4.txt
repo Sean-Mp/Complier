@@ -1,0 +1,39 @@
+glob { 
+  unused
+} 
+
+proc { 
+} 
+
+func { 
+} 
+
+main { 
+  var { counter x y temp }
+  
+  print "WHILE LOOPS" ;
+  
+  print "Basic while" ;
+  counter = 0 ;
+  while ( not (counter eq 3) ) {
+    print counter ;
+    counter = ( counter plus 1 )
+  } ;
+  print "After while" ;
+
+  print "Nested while" ;
+  x = 0 ;
+  while ( not (x eq 2) ) {
+    y = 0 ;
+    while ( not (y eq 2) ) {
+      temp = ( ( x mult 10 ) plus y ) ;
+      print temp ;
+      y = ( y plus 1 )
+    } ;
+    x = ( x plus 1 )
+  } ;
+  print "After nested" ;
+  
+  print "DONE" ;
+  halt
+}

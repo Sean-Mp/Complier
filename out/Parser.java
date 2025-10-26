@@ -380,7 +380,7 @@ class CUP$Parser$actions {
 		int mainright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		MainProgramNode main = (MainProgramNode)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-                System.out.println("VALID SPL PROGRAM");
+                //System.out.println("VALID SPL PROGRAM");
                 RESULT = new ProgramNode(vars, procs, funcs, main, -1, -1);
                 parser.syntaxTree = (ProgramNode)RESULT;
             
@@ -421,7 +421,7 @@ class CUP$Parser$actions {
 		int nameright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String name = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-                     System.out.println("GLOBAL VAR: " + name); 
+                     //System.out.println("GLOBAL VAR: " + name); 
                      Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
                      if (s == null) {
                          System.err.println("Error: Variable '" + name + "' already declared");
@@ -443,7 +443,7 @@ class CUP$Parser$actions {
 		int nameright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String name = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-                     System.out.println("GLOBAL VAR: " + name); 
+                     //System.out.println("GLOBAL VAR: " + name); 
                      Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
                      if (s == null) {
                          System.err.println("Error: Variable '" + name + "' already declared");
@@ -487,7 +487,7 @@ class CUP$Parser$actions {
 		int nameright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String name = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-                     System.out.println("MAIN VAR: " + name); 
+                     //System.out.println("MAIN VAR: " + name); 
                      Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
                      if (s == null) {
                          System.err.println("Error: Variable '" + name + "' already declared");
@@ -509,7 +509,7 @@ class CUP$Parser$actions {
 		int nameright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		String name = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-                     System.out.println("MAIN VAR: " + name); 
+                     //System.out.println("MAIN VAR: " + name); 
                      Symbol s = parser.symbolTable.addSymbol(name.toString(), "numeric");
                      if (s == null) {
                          System.err.println("Error: Variable '" + name + "' already declared");
@@ -587,7 +587,7 @@ class CUP$Parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		List<ASTNode> a = (List<ASTNode>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-            System.out.println("PROCEDURE: " + name);
+            //System.out.println("PROCEDURE: " + name);
             List<String> localVars = (List<String>)b;
             RESULT = new ProcedureNode(name.toString(), params, localVars, a, -1, -1);
             parser.symbolTable.exitScope();
@@ -663,7 +663,7 @@ class CUP$Parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		List<ASTNode> a = (List<ASTNode>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-            System.out.println("FUNCTION: " + name);
+            //System.out.println("FUNCTION: " + name);
             List<String> localVars = (List<String>)b;
             ASTNode returnValue = parser.findReturnValue(a);
             RESULT = new FunctionNode(name.toString(), params, localVars, a, returnValue, -1, -1);
@@ -681,7 +681,7 @@ class CUP$Parser$actions {
 		int mtright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		List<String> mt = (List<String>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-            System.out.println("BODY with locals"); 
+            //System.out.println("BODY with locals"); 
             RESULT = mt; // maxthree returns List<String>
         
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("body",22, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -804,7 +804,7 @@ class CUP$Parser$actions {
 		int algoright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		List<ASTNode> algo = (List<ASTNode>)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-                 System.out.println("MAIN PROGRAM");
+                 //System.out.println("MAIN PROGRAM");
                  RESULT = new MainProgramNode(vars, algo, -1, -1);
                  parser.symbolTable.exitScope();
              
@@ -820,7 +820,7 @@ class CUP$Parser$actions {
 		int ilright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		List<ASTNode> il = (List<ASTNode>)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-            System.out.println("ALGO"); 
+            //System.out.println("ALGO"); 
             RESULT = il;
         
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("algo",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -835,7 +835,7 @@ class CUP$Parser$actions {
 		int iright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ASTNode i = (ASTNode)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-                  System.out.println("SINGLE INSTRUCTION"); 
+                  //System.out.println("SINGLE INSTRUCTION"); 
                   RESULT = parser.createList(i);
               
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instr_list",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -853,8 +853,11 @@ class CUP$Parser$actions {
 		int restright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		List<ASTNode> rest = (List<ASTNode>)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-                  System.out.println("MULTIPLE INSTRUCTIONS"); 
-                  RESULT = parser.appendToList(rest, i);
+                  //System.out.println("MULTIPLE INSTRUCTIONS"); 
+                  List<ASTNode> result = new ArrayList<>();
+                  result.add(i);           // Add current instruction FIRST
+                  result.addAll(rest);     // Then add the rest
+                  RESULT = result;
               
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instr_list",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -865,7 +868,7 @@ class CUP$Parser$actions {
             {
               ASTNode RESULT =null;
 		 
-             System.out.println("INSTR: halt"); 
+             //System.out.println("INSTR: halt"); 
              RESULT = new HaltNode(-1, -1);
          
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instr",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -880,7 +883,7 @@ class CUP$Parser$actions {
 		int outright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ASTNode out = (ASTNode)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-             System.out.println("INSTR: print"); 
+             //System.out.println("INSTR: print"); 
              RESULT = out;
          
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instr",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -898,7 +901,7 @@ class CUP$Parser$actions {
 		int inright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		List<ASTNode> in = (List<ASTNode>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-             System.out.println("INSTR: proc call " + name); 
+             //System.out.println("INSTR: proc call " + name); 
              RESULT = new ProcedureCallNode(name.toString(), in, -1, -1);
          
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instr",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -955,7 +958,7 @@ class CUP$Parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ASTNode a = (ASTNode)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-              System.out.println("INSTR: return");
+              //System.out.println("INSTR: return");
               RESULT = new ReturnNode(a, -1, -1);
           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("instr",8, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -976,7 +979,7 @@ class CUP$Parser$actions {
 		int inright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		List<ASTNode> in = (List<ASTNode>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-              System.out.println("ASSIGN: func call " + var + " = " + func);
+              //System.out.println("ASSIGN: func call " + var + " = " + func);
               Symbol s = parser.symbolTable.lookup(var.toString());
               if (s == null || !s.getType().equals("numeric")) {
                   System.err.println("Type Error: Variable '" + var + "' must be numeric");
@@ -999,7 +1002,7 @@ class CUP$Parser$actions {
 		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ASTNode t = (ASTNode)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-              System.out.println("ASSIGN: " + var + " = expression");
+              //System.out.println("ASSIGN: " + var + " = expression");
               Symbol s = parser.symbolTable.lookup(var.toString());
               if (s == null) {
                   System.err.println("Type Error: Variable '" + var + "' not declared");
@@ -1021,7 +1024,7 @@ class CUP$Parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		List<ASTNode> a = (List<ASTNode>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-            System.out.println("LOOP: while");
+            //System.out.println("LOOP: while");
             RESULT = new LoopNode("while", t, a, -1, -1);
         
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("loop",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1039,7 +1042,7 @@ class CUP$Parser$actions {
 		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		ASTNode t = (ASTNode)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		 
-            System.out.println("LOOP: do-until");
+            //System.out.println("LOOP: do-until");
             RESULT = new LoopNode("do-until", t, a, -1, -1);
         
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("loop",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-5)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1057,7 +1060,7 @@ class CUP$Parser$actions {
 		int aright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		List<ASTNode> a = (List<ASTNode>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-              System.out.println("BRANCH: if");
+              //System.out.println("BRANCH: if");
               RESULT = new BranchNode(t, a, null, -1, -1);
           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("branch",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1078,7 +1081,7 @@ class CUP$Parser$actions {
 		int a2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		List<ASTNode> a2 = (List<ASTNode>)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-              System.out.println("BRANCH: if-else");
+              //System.out.println("BRANCH: if-else");
               RESULT = new BranchNode(t, a1, a2, -1, -1);
           
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("branch",11, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-8)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1203,7 +1206,7 @@ class CUP$Parser$actions {
 		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		ASTNode t = (ASTNode)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-            System.out.println("TERM: unary op " + u);
+            //System.out.println("TERM: unary op " + u);
             RESULT = new UnopNode(u, t, -1, -1);
         
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("term",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-3)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -1224,7 +1227,7 @@ class CUP$Parser$actions {
 		int t2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		ASTNode t2 = (ASTNode)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		 
-            System.out.println("TERM: binary op " + b);
+            //System.out.println("TERM: binary op " + b);
             RESULT = new BinopNode(b, t1, t2, -1, -1);
         
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("term",13, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);

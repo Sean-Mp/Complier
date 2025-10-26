@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SPL Intermediate Code</title>
+<style>
+body { font-family: 'Courier New', monospace; background-color: #f5f5f5; padding: 20px; }
+h1 { color: #333; }
+pre { background-color: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 5px; overflow-x: auto; line-height: 1.5; }
+.comment { color: #008000; }
+.keyword { color: #0000ff; font-weight: bold; }
+.label { color: #ff0000; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>SPL Intermediate Code</h1>
+<pre>
+<span class='comment'>REM === SPL INTERMEDIATE CODE ===</span>
+<span class='comment'>REM Global variables: [counter, globalresult]</span>
+
+<span class='comment'>REM Stored procedure: increment</span>
+<span class='comment'>REM Stored procedure: greet</span>
+<span class='comment'>REM Stored procedure: checknumber</span>
+<span class='comment'>REM Stored function: factorial</span>
+<span class='comment'>REM Stored function: max</span>
+<span class='comment'>REM Stored function: iseven</span>
+
+<span class='comment'>REM === MAIN PROGRAM ===</span>
+<span class='comment'>REM Main variables: [first, second, temp, result, loopcounter, fact3, fact4]</span>
+
+first = 5
+second = 8
+<span class='keyword'>PRINT</span> &quot;Testing fac:&quot;
+v0 = 0
+v1 = 0
+r2 = 0
+v0 = 1
+v1 = 1
+<span class='comment'>REM L0</span>
+<span class='keyword'>IF</span> first &gt; v1 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L1</span>
+<span class='keyword'>GOTO</span> <span class='label'>L2</span>
+<span class='comment'>REM L1</span>
+t3 = v0 * v1
+v0 = t3
+t4 = v1 + 1
+v1 = t4
+<span class='keyword'>GOTO</span> <span class='label'>L0</span>
+<span class='comment'>REM L2</span>
+r2 = v0
+result = r2
+<span class='keyword'>PRINT</span> result
+<span class='keyword'>PRINT</span> &quot;Testing max:&quot;
+r5 = 0
+<span class='keyword'>IF</span> first &gt; second <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L3</span>
+<span class='keyword'>GOTO</span> <span class='label'>L4</span>
+<span class='comment'>REM L4</span>
+<span class='keyword'>GOTO</span> <span class='label'>L5</span>
+<span class='comment'>REM L3</span>
+<span class='comment'>REM L5</span>
+r5 = first
+temp = r5
+<span class='keyword'>PRINT</span> temp
+<span class='keyword'>PRINT</span> &quot;Test greet:&quot;
+<span class='comment'>REM Inlining procedure: greet</span>
+v6 = 0
+v6 = 0
+<span class='comment'>REM L6</span>
+<span class='keyword'>IF</span> 3 &gt; v6 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L7</span>
+<span class='keyword'>GOTO</span> <span class='label'>L8</span>
+<span class='comment'>REM L7</span>
+<span class='keyword'>PRINT</span> &quot;Hello&quot;
+<span class='keyword'>PRINT</span> second
+t7 = v6 + 1
+v6 = t7
+<span class='keyword'>GOTO</span> <span class='label'>L6</span>
+<span class='comment'>REM L8</span>
+<span class='keyword'>PRINT</span> &quot;Test checknum:&quot;
+<span class='comment'>REM Inlining procedure: checknumber</span>
+<span class='keyword'>IF</span> 7 &gt; 10 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L9</span>
+<span class='keyword'>GOTO</span> <span class='label'>L10</span>
+<span class='comment'>REM L10</span>
+<span class='keyword'>IF</span> 7 &gt; 5 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L12</span>
+<span class='keyword'>GOTO</span> <span class='label'>L13</span>
+<span class='comment'>REM L13</span>
+<span class='keyword'>PRINT</span> &quot;Small&quot;
+<span class='keyword'>GOTO</span> <span class='label'>L14</span>
+<span class='comment'>REM L12</span>
+<span class='keyword'>PRINT</span> &quot;Medium&quot;
+<span class='comment'>REM L14</span>
+<span class='keyword'>GOTO</span> <span class='label'>L11</span>
+<span class='comment'>REM L9</span>
+<span class='keyword'>PRINT</span> &quot;Big&quot;
+<span class='comment'>REM L11</span>
+<span class='comment'>REM Inlining procedure: checknumber</span>
+<span class='keyword'>IF</span> 15 &gt; 10 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L15</span>
+<span class='keyword'>GOTO</span> <span class='label'>L16</span>
+<span class='comment'>REM L16</span>
+<span class='keyword'>IF</span> 15 &gt; 5 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L18</span>
+<span class='keyword'>GOTO</span> <span class='label'>L19</span>
+<span class='comment'>REM L19</span>
+<span class='keyword'>PRINT</span> &quot;Small&quot;
+<span class='keyword'>GOTO</span> <span class='label'>L20</span>
+<span class='comment'>REM L18</span>
+<span class='keyword'>PRINT</span> &quot;Medium&quot;
+<span class='comment'>REM L20</span>
+<span class='keyword'>GOTO</span> <span class='label'>L17</span>
+<span class='comment'>REM L15</span>
+<span class='keyword'>PRINT</span> &quot;Big&quot;
+<span class='comment'>REM L17</span>
+<span class='comment'>REM Inlining procedure: checknumber</span>
+<span class='keyword'>IF</span> 3 &gt; 10 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L21</span>
+<span class='keyword'>GOTO</span> <span class='label'>L22</span>
+<span class='comment'>REM L22</span>
+<span class='keyword'>IF</span> 3 &gt; 5 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L24</span>
+<span class='keyword'>GOTO</span> <span class='label'>L25</span>
+<span class='comment'>REM L25</span>
+<span class='keyword'>PRINT</span> &quot;Small&quot;
+<span class='keyword'>GOTO</span> <span class='label'>L26</span>
+<span class='comment'>REM L24</span>
+<span class='keyword'>PRINT</span> &quot;Medium&quot;
+<span class='comment'>REM L26</span>
+<span class='keyword'>GOTO</span> <span class='label'>L23</span>
+<span class='comment'>REM L21</span>
+<span class='keyword'>PRINT</span> &quot;Big&quot;
+<span class='comment'>REM L23</span>
+<span class='keyword'>PRINT</span> &quot;Test iseven:&quot;
+v8 = 0
+r9 = 0
+t10 = first / 2
+v8 = t10
+t11 = v8 * 2
+v8 = t11
+<span class='keyword'>IF</span> v8 = first <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L27</span>
+<span class='keyword'>GOTO</span> <span class='label'>L28</span>
+<span class='comment'>REM L28</span>
+<span class='keyword'>GOTO</span> <span class='label'>L29</span>
+<span class='comment'>REM L27</span>
+<span class='comment'>REM L29</span>
+r9 = 1
+temp = r9
+<span class='keyword'>PRINT</span> temp
+v12 = 0
+r13 = 0
+t14 = second / 2
+v12 = t14
+t15 = v12 * 2
+v12 = t15
+<span class='keyword'>IF</span> v12 = second <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L30</span>
+<span class='keyword'>GOTO</span> <span class='label'>L31</span>
+<span class='comment'>REM L31</span>
+<span class='keyword'>GOTO</span> <span class='label'>L32</span>
+<span class='comment'>REM L30</span>
+<span class='comment'>REM L32</span>
+r13 = 1
+temp = r13
+<span class='keyword'>PRINT</span> temp
+<span class='keyword'>PRINT</span> &quot;Test do-until:&quot;
+loopcounter = 0
+<span class='comment'>REM do-until loop start</span>
+<span class='comment'>REM L33</span>
+<span class='keyword'>PRINT</span> &quot;Do-until it:&quot;
+<span class='keyword'>PRINT</span> loopcounter
+t16 = loopcounter + 1
+loopcounter = t16
+<span class='keyword'>IF</span> loopcounter &gt; 2 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L34</span>
+<span class='keyword'>GOTO</span> <span class='label'>L33</span>
+<span class='comment'>REM L34</span>
+<span class='comment'>REM do-until loop end</span>
+<span class='keyword'>PRINT</span> &quot;Test counter:&quot;
+<span class='keyword'>PRINT</span> counter
+<span class='keyword'>PRINT</span> &quot;Test complex:&quot;
+v17 = 0
+v18 = 0
+r19 = 0
+v17 = 1
+v18 = 1
+<span class='comment'>REM L35</span>
+<span class='keyword'>IF</span> 3 &gt; v18 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L36</span>
+<span class='keyword'>GOTO</span> <span class='label'>L37</span>
+<span class='comment'>REM L36</span>
+t20 = v17 * v18
+v17 = t20
+t21 = v18 + 1
+v18 = t21
+<span class='keyword'>GOTO</span> <span class='label'>L35</span>
+<span class='comment'>REM L37</span>
+r19 = v17
+fact3 = r19
+t22 = first * second
+t23 = t22 + fact3
+globalresult = t23
+<span class='keyword'>PRINT</span> globalresult
+<span class='keyword'>PRINT</span> &quot;Test nested:&quot;
+v24 = 0
+v25 = 0
+r26 = 0
+v24 = 1
+v25 = 1
+<span class='comment'>REM L38</span>
+<span class='keyword'>IF</span> 3 &gt; v25 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L39</span>
+<span class='keyword'>GOTO</span> <span class='label'>L40</span>
+<span class='comment'>REM L39</span>
+t27 = v24 * v25
+v24 = t27
+t28 = v25 + 1
+v25 = t28
+<span class='keyword'>GOTO</span> <span class='label'>L38</span>
+<span class='comment'>REM L40</span>
+r26 = v24
+fact3 = r26
+v29 = 0
+v30 = 0
+r31 = 0
+v29 = 1
+v30 = 1
+<span class='comment'>REM L41</span>
+<span class='keyword'>IF</span> 4 &gt; v30 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L42</span>
+<span class='keyword'>GOTO</span> <span class='label'>L43</span>
+<span class='comment'>REM L42</span>
+t32 = v29 * v30
+v29 = t32
+t33 = v30 + 1
+v30 = t33
+<span class='keyword'>GOTO</span> <span class='label'>L41</span>
+<span class='comment'>REM L43</span>
+r31 = v29
+fact4 = r31
+r34 = 0
+<span class='keyword'>IF</span> fact3 &gt; fact4 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L44</span>
+<span class='keyword'>GOTO</span> <span class='label'>L45</span>
+<span class='comment'>REM L45</span>
+<span class='keyword'>GOTO</span> <span class='label'>L46</span>
+<span class='comment'>REM L44</span>
+<span class='comment'>REM L46</span>
+r34 = fact3
+temp = r34
+<span class='keyword'>PRINT</span> temp
+<span class='keyword'>PRINT</span> &quot;Test unary:&quot;
+t35 = -10
+temp = t35
+<span class='keyword'>PRINT</span> temp
+<span class='keyword'>IF</span> 3 &gt; 5 <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L48</span>
+<span class='keyword'>GOTO</span> <span class='label'>L47</span>
+<span class='comment'>REM L48</span>
+<span class='keyword'>PRINT</span> &quot;False&quot;
+<span class='keyword'>GOTO</span> <span class='label'>L49</span>
+<span class='comment'>REM L47</span>
+<span class='keyword'>PRINT</span> &quot;True&quot;
+<span class='comment'>REM L49</span>
+<span class='keyword'>PRINT</span> &quot;Test compare:&quot;
+<span class='keyword'>IF</span> first = second <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L50</span>
+<span class='keyword'>GOTO</span> <span class='label'>L51</span>
+<span class='comment'>REM L51</span>
+<span class='keyword'>PRINT</span> &quot;Not equal&quot;
+<span class='keyword'>GOTO</span> <span class='label'>L52</span>
+<span class='comment'>REM L50</span>
+<span class='keyword'>PRINT</span> &quot;Equal&quot;
+<span class='comment'>REM L52</span>
+<span class='keyword'>IF</span> first &gt; second <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L53</span>
+<span class='keyword'>GOTO</span> <span class='label'>L54</span>
+<span class='comment'>REM L54</span>
+<span class='keyword'>GOTO</span> <span class='label'>L55</span>
+<span class='comment'>REM L53</span>
+<span class='keyword'>PRINT</span> &quot;Less than&quot;
+<span class='comment'>REM L55</span>
+<span class='keyword'>IF</span> second &gt; first <span class='keyword'>THEN</span> <span class='keyword'>GOTO</span> <span class='label'>L56</span>
+<span class='keyword'>GOTO</span> <span class='label'>L57</span>
+<span class='comment'>REM L57</span>
+<span class='keyword'>GOTO</span> <span class='label'>L58</span>
+<span class='comment'>REM L56</span>
+<span class='keyword'>PRINT</span> &quot;Greater than&quot;
+<span class='comment'>REM L58</span>
+<span class='keyword'>PRINT</span> &quot;Test multiple:&quot;
+first = 100
+second = 200
+temp = 300
+<span class='keyword'>PRINT</span> first
+<span class='keyword'>PRINT</span> second
+<span class='keyword'>PRINT</span> temp
+<span class='keyword'>PRINT</span> &quot;completed!&quot;
+<span class='keyword'>STOP</span>
+</pre>
+</body>
+</html>
