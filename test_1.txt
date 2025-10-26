@@ -1,0 +1,42 @@
+glob { 
+  unused
+} 
+
+proc { 
+} 
+
+func { 
+} 
+
+main { 
+  var { a b c result }
+  
+  print "ARITHMETIC" ;
+  
+  print "Addition" ;
+  a = 10 ;
+  b = 5 ;
+  c = ( a plus b ) ;
+  print a ;
+  print b ;
+  print c ;
+  
+  print "Subtraction" ;
+  c = ( a minus b ) ;
+  print c ;
+  
+  print "Multiplication" ;
+  c = ( a mult b ) ;
+  print c ;
+  
+  print "Division" ;
+  c = ( a div b ) ;
+  print c ;
+  
+  print "Complex expr" ;
+  result = ( ( a mult 2 ) plus ( b mult 3 ) ) ;
+  print result ;
+  
+  print "DONE" ;
+  halt
+}

@@ -1,0 +1,55 @@
+glob { 
+  unused
+} 
+
+proc { 
+} 
+
+func { 
+} 
+
+main { 
+  var { a b }
+  
+  print "COMPARISONS" ;
+  
+  a = 10 ;
+  b = 5 ;
+  
+  print "Equality" ;
+  if ( a eq b ) {
+    print "Equal"
+  } else {
+    print "Not equal"
+  } ;
+  
+  print "Same values" ;
+  a = 7 ;
+  b = 7 ;
+  if ( a eq b ) {
+    print "Equal"
+  } else {
+    print "Not equal"
+  } ;
+  
+  print "Greater than" ;
+  a = 10 ;
+  b = 5 ;
+  if ( a > b ) {
+    print "a greater"
+  } else {
+    print "a not greater"
+  } ;
+  
+  print "Not greater" ;
+  a = 3 ;
+  b = 8 ;
+  if ( a > b ) {
+    print "a greater"
+  } else {
+    print "a not greater"
+  } ;
+  
+  print "DONE" ;
+  halt
+}

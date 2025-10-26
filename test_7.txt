@@ -1,0 +1,58 @@
+glob { 
+  unused
+} 
+
+proc { 
+} 
+
+func { 
+  doublex (n) {
+    local { output }
+    output = ( n mult 2 ) ;
+    return output
+  }
+  
+  addtwo (a b) {
+    local { sumval }
+    sumval = ( a plus b ) ;
+    return sumval
+  }
+  
+  nested (x) {
+    local { val1 val2 }
+    val1 = doublex ( x ) ;
+    val2 = addtwo ( val1 x ) ;
+    return val2
+  }
+  
+  multifunc (a b) {
+    local { temp1 temp2 result }
+    temp1 = doublex ( a ) ;
+    temp2 = doublex ( b ) ;
+    result = addtwo ( temp1 temp2 ) ;
+    return result
+  }
+} 
+
+main { 
+  var { result temp1 temp2 }
+  
+  print "NESTED FUNCS" ;
+  
+  print "Simple nested" ;
+  result = nested ( 5 ) ;
+  print result ;
+  
+  print "Multi nested" ;
+  result = multifunc ( 3 4 ) ;
+  print result ;
+  
+  print "Nested expr" ;
+  temp1 = addtwo ( 1 2 ) ;
+  temp2 = addtwo ( 3 4 ) ;
+  result = addtwo ( temp1 temp2 ) ;
+  print result ;
+  
+  print "DONE" ;
+  halt
+}

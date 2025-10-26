@@ -1,18 +1,16 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-// Code generator implementing the same visitor interface as TypeAnalyzer
 public class CodeGenerator implements TypeVisitor {
     private final symboltable.SymbolTable symbolTable;
     private final StringBuilder out = new StringBuilder();
     private int labelCounter = 0;
     private int tempCounter = 0;
     
-    // Store procedure/function bodies for inlining
     private Map<String, ProcedureNode> procedures = new HashMap<>();
     private Map<String, FunctionNode> functions = new HashMap<>();
 
@@ -20,7 +18,6 @@ public class CodeGenerator implements TypeVisitor {
         this.symbolTable = symbolTable;
     }
 
-    // ===== Utilities =====
     private void emit(String line) {
         out.append(line).append("\n");
     }
@@ -49,14 +46,12 @@ public class CodeGenerator implements TypeVisitor {
         }
     }
 
-    // ===== Visitor implementations =====
     @Override
     public void visit(ProgramNode node) {
         emitComment("=== SPL INTERMEDIATE CODE ===");
         emitComment("Global variables: " + node.getGlobalVars());
         emit("");
 
-        // Store procedures and functions for inlining (don't generate code yet)
         for (ProcedureNode p : node.getProcedures()) {
             procedures.put(p.getName(), p);
             emitComment("Stored procedure: " + p.getName());
@@ -67,23 +62,19 @@ public class CodeGenerator implements TypeVisitor {
         }
         emit("");
 
-        // Generate main program algorithm
         emitComment("=== MAIN PROGRAM ===");
         if (node.getMainProgram() != null) {
             node.getMainProgram().accept(this);
         }
-        emit("STOP");
     }
 
     @Override
     public void visit(ProcedureNode node) {
-        // Metadata only - body stored for inlining
         emitComment("PROC " + node.getName() + " params=" + node.getParameters() + " locals=" + node.getLocalVars());
     }
 
     @Override
     public void visit(FunctionNode node) {
-        // Metadata only - body stored for inlining
         emitComment("FUNC " + node.getName() + " params=" + node.getParameters() + " locals=" + node.getLocalVars());
     }
 
@@ -92,7 +83,6 @@ public class CodeGenerator implements TypeVisitor {
         emitComment("Main variables: " + node.getVariables());
         emit("");
 
-        // Translate only the algorithm
         List<ASTNode> algo = node.getAlgorithm();
         if (algo != null) {
             for (ASTNode stmt : algo) {
@@ -103,7 +93,6 @@ public class CodeGenerator implements TypeVisitor {
 
     @Override 
     public void visit(AtomNode node) {
-        // Atoms are handled in expression contexts
     }
 
     @Override 
@@ -131,7 +120,6 @@ public class CodeGenerator implements TypeVisitor {
         String loopType = node.getLoopType();
         
         if ("while".equalsIgnoreCase(loopType)) {
-            // WHILE loop: test before body
             String beginLabel = newLabel();
             String bodyLabel = newLabel();
             String endLabel = newLabel();
@@ -148,7 +136,6 @@ public class CodeGenerator implements TypeVisitor {
             emitComment("while loop end");
             
         } else if ("do-until".equalsIgnoreCase(loopType) || "do".equalsIgnoreCase(loopType)) {
-            // DO-UNTIL loop: body executes at least once, test after
             String beginLabel = newLabel();
             String endLabel = newLabel();
 
@@ -157,7 +144,6 @@ public class CodeGenerator implements TypeVisitor {
             for (ASTNode s : node.getBody()) {
                 s.accept(this);
             }
-            // For do-until, exit when condition is TRUE (opposite of while)
             translateBoolean(node.getCondition(), endLabel, beginLabel);
             emit("REM " + endLabel);
             emitComment("do-until loop end");
@@ -172,10 +158,8 @@ public class CodeGenerator implements TypeVisitor {
 
         List<ASTNode> elseBody = node.getElseBody();
         
-        // Translate condition: if true goto then, if false goto else
         translateBoolean(node.getCondition(), thenLabel, elseLabel);
         
-        // ELSE body comes first (executed when condition is false)
         emit("REM " + elseLabel);
         if (elseBody != null && !elseBody.isEmpty()) {
             for (ASTNode s : elseBody) {
@@ -184,7 +168,6 @@ public class CodeGenerator implements TypeVisitor {
         }
         emit("GOTO " + endLabel);
         
-        // THEN body
         emit("REM " + thenLabel);
         for (ASTNode s : node.getIfBody()) {
             s.accept(this);
@@ -205,16 +188,13 @@ public class CodeGenerator implements TypeVisitor {
 
     @Override
     public void visit(ProcedureCallNode node) {
-        emitComment("Procedure call: " + node.getProcedureName());
-        emit("CALL " + node.getProcedureName());
-        // Note: In the final phase, CALL will be replaced by inlining
+        emitComment("Inlining procedure: " + node.getProcedureName());
+        inlineProcedure(node.getProcedureName(), node.getArguments());
     }
 
     @Override
     public void visit(FunctionCallNode node) {
-        emitComment("Function call: " + node.getFunctionName());
-        emit("CALL " + node.getFunctionName());
-        // Note: In the final phase, CALL will be replaced by inlining
+        emitComment("Inlining function: " + node.getFunctionName());
     }
 
     @Override
@@ -239,11 +219,230 @@ public class CodeGenerator implements TypeVisitor {
         }
     }
 
-    // ===== Helpers for expression and boolean translation =====
-    private String evaluateExpression(ASTNode expr) {
-        if (expr == null) {
+    // === INLINING IMPLEMENTATION ===
+    
+    private void inlineProcedure(String procName, List<ASTNode> arguments) {
+        ProcedureNode proc = procedures.get(procName);
+        if (proc == null) {
+            emitComment("ERROR: Procedure " + procName + " not found");
+            return;
+        }
+
+        Map<String, String> paramMap = new HashMap<>();
+        List<String> params = proc.getParameters();
+        
+        // Map parameters to argument values
+        for (int i = 0; i < params.size() && i < arguments.size(); i++) {
+            String argValue = evaluateExpression(arguments.get(i));
+            paramMap.put(params.get(i), argValue);
+        }
+
+        // Rename local variables to avoid conflicts
+        Map<String, String> localMap = new HashMap<>();
+        for (String local : proc.getLocalVars()) {
+            String renamed = "v" + (tempCounter++);
+            localMap.put(local, renamed);
+            emit(renamed + " = 0");
+        }
+
+        // Inline the procedure body with substitutions
+        for (ASTNode stmt : proc.getAlgorithm()) {
+            inlineStatement(stmt, paramMap, localMap);
+        }
+    }
+
+    private String inlineFunction(String funcName, List<ASTNode> arguments) {
+        FunctionNode func = functions.get(funcName);
+        if (func == null) {
+            emitComment("ERROR: Function " + funcName + " not found");
             return "0";
         }
+
+        Map<String, String> paramMap = new HashMap<>();
+        List<String> params = func.getParameters();
+        
+        // Map parameters to argument values
+        for (int i = 0; i < params.size() && i < arguments.size(); i++) {
+            String argValue = evaluateExpression(arguments.get(i));
+            paramMap.put(params.get(i), argValue);
+        }
+
+        // Rename local variables
+        Map<String, String> localMap = new HashMap<>();
+        for (String local : func.getLocalVars()) {
+            String renamed = "v" + (tempCounter++);
+            localMap.put(local, renamed);
+            emit(renamed + " = 0");
+        }
+
+        // Result variable for return value
+        String resultVar = "r" + (tempCounter++);
+        emit(resultVar + " = 0");
+
+        // Inline function body
+        for (ASTNode stmt : func.getAlgorithm()) {
+            if (stmt instanceof ReturnNode) {
+                String retVal = evaluateExpressionWithSubst(
+                    ((ReturnNode) stmt).getReturnValue(), 
+                    paramMap, 
+                    localMap
+                );
+                emit(resultVar + " = " + retVal);
+            } else {
+                inlineStatement(stmt, paramMap, localMap);
+            }
+        }
+
+        return resultVar;
+    }
+
+    private void inlineStatement(ASTNode stmt, Map<String, String> paramMap, Map<String, String> localMap) {
+        if (stmt instanceof AssignmentNode) {
+            AssignmentNode assign = (AssignmentNode) stmt;
+            String target = substituteVar(assign.getVariable(), paramMap, localMap);
+            String value = evaluateExpressionWithSubst(assign.getExpression(), paramMap, localMap);
+            emit(target + " = " + value);
+        }
+        else if (stmt instanceof PrintNode) {
+            PrintNode print = (PrintNode) stmt;
+            if (print.isString()) {
+                emit("PRINT \"" + print.getOutput() + "\"");
+            } else {
+                String value = evaluateExpressionWithSubst((ASTNode) print.getOutput(), paramMap, localMap);
+                emit("PRINT " + value);
+            }
+        }
+        else if (stmt instanceof HaltNode) {
+            // Skip HALT when inlining - functions/procedures should return naturally
+            return;
+        }
+        else if (stmt instanceof LoopNode) {
+            LoopNode loop = (LoopNode) stmt;
+            if ("while".equalsIgnoreCase(loop.getLoopType())) {
+                String beginLabel = newLabel();
+                String bodyLabel = newLabel();
+                String endLabel = newLabel();
+                
+                emit("REM " + beginLabel);
+                translateBooleanWithSubst(loop.getCondition(), bodyLabel, endLabel, paramMap, localMap);
+                emit("REM " + bodyLabel);
+                for (ASTNode s : loop.getBody()) {
+                    inlineStatement(s, paramMap, localMap);
+                }
+                emit("GOTO " + beginLabel);
+                emit("REM " + endLabel);
+            }
+        }
+        else if (stmt instanceof BranchNode) {
+            BranchNode branch = (BranchNode) stmt;
+            String thenLabel = newLabel();
+            String elseLabel = newLabel();
+            String endLabel = newLabel();
+            
+            translateBooleanWithSubst(branch.getCondition(), thenLabel, elseLabel, paramMap, localMap);
+            
+            emit("REM " + elseLabel);
+            if (branch.getElseBody() != null) {
+                for (ASTNode s : branch.getElseBody()) {
+                    inlineStatement(s, paramMap, localMap);
+                }
+            }
+            emit("GOTO " + endLabel);
+            
+            emit("REM " + thenLabel);
+            for (ASTNode s : branch.getIfBody()) {
+                inlineStatement(s, paramMap, localMap);
+            }
+            emit("REM " + endLabel);
+        }
+    }
+
+    private String substituteVar(String var, Map<String, String> paramMap, Map<String, String> localMap) {
+        if (paramMap.containsKey(var)) return paramMap.get(var);
+        if (localMap.containsKey(var)) return localMap.get(var);
+        return var; // Global or main variable
+    }
+
+    private String evaluateExpressionWithSubst(ASTNode expr, Map<String, String> paramMap, Map<String, String> localMap) {
+        if (expr == null) return "0";
+        
+        if (expr instanceof AtomNode) {
+            Object v = ((AtomNode) expr).getValue();
+            if (v instanceof Integer) {
+                return String.valueOf(v);
+            } else {
+                return substituteVar(String.valueOf(v), paramMap, localMap);
+            }
+        }
+        
+        if (expr instanceof UnopNode) {
+            UnopNode u = (UnopNode) expr;
+            String operand = evaluateExpressionWithSubst(u.getOperand(), paramMap, localMap);
+            String op = u.getOperator();
+            
+            if ("neg".equalsIgnoreCase(op)) {
+                String temp = newTemp();
+                emit(temp + " = -" + operand);
+                return temp;
+            }
+            return operand;
+        }
+        
+        if (expr instanceof BinopNode) {
+            BinopNode b = (BinopNode) expr;
+            String left = evaluateExpressionWithSubst(b.getLeft(), paramMap, localMap);
+            String right = evaluateExpressionWithSubst(b.getRight(), paramMap, localMap);
+            String op = mapBinOp(b.getOperator());
+            String temp = newTemp();
+            emit(temp + " = " + left + " " + op + " " + right);
+            return temp;
+        }
+        
+        if (expr instanceof FunctionCallNode) {
+            FunctionCallNode fc = (FunctionCallNode) expr;
+            List<ASTNode> args = fc.getArguments();
+            return inlineFunction(fc.getFunctionName(), args);
+        }
+        
+        return "0";
+    }
+
+    private void translateBooleanWithSubst(ASTNode cond, String trueLabel, String falseLabel, 
+                                          Map<String, String> paramMap, Map<String, String> localMap) {
+        if (cond == null) {
+            emit("GOTO " + falseLabel);
+            return;
+        }
+        
+        if (cond instanceof UnopNode) {
+            UnopNode u = (UnopNode) cond;
+            if ("not".equalsIgnoreCase(u.getOperator())) {
+                translateBooleanWithSubst(u.getOperand(), falseLabel, trueLabel, paramMap, localMap);
+                return;
+            }
+        }
+        
+        if (cond instanceof BinopNode) {
+            BinopNode b = (BinopNode) cond;
+            String op = b.getOperator();
+            
+            if (isComparison(op)) {
+                String left = evaluateExpressionWithSubst(b.getLeft(), paramMap, localMap);
+                String right = evaluateExpressionWithSubst(b.getRight(), paramMap, localMap);
+                String cmpOp = mapCmpOp(op);
+                emit("IF " + left + " " + cmpOp + " " + right + " THEN GOTO " + trueLabel);
+                emit("GOTO " + falseLabel);
+                return;
+            }
+        }
+        
+        String temp = evaluateExpressionWithSubst(cond, paramMap, localMap);
+        emit("IF " + temp + " <> 0 THEN GOTO " + trueLabel);
+        emit("GOTO " + falseLabel);
+    }
+
+    private String evaluateExpression(ASTNode expr) {
+        if (expr == null) return "0";
         
         if (expr instanceof AtomNode) {
             Object v = ((AtomNode) expr).getValue();
@@ -258,11 +457,6 @@ public class CodeGenerator implements TypeVisitor {
             if ("neg".equalsIgnoreCase(op) || "-".equals(op)) {
                 String temp = newTemp();
                 emit(temp + " = -" + operand);
-                return temp;
-            }
-            if ("not".equalsIgnoreCase(op)) {
-                String temp = newTemp();
-                emit(temp + " = NOT " + operand);
                 return temp;
             }
             return operand;
@@ -280,16 +474,10 @@ public class CodeGenerator implements TypeVisitor {
         
         if (expr instanceof FunctionCallNode) {
             FunctionCallNode fc = (FunctionCallNode) expr;
-            emit("CALL " + fc.getFunctionName());
-            String temp = newTemp();
-            emit(temp + " = RETVAL");
-            return temp;
+            return inlineFunction(fc.getFunctionName(), fc.getArguments());
         }
         
-        // Default fallback
-        String temp = newTemp();
-        emit(temp + " = 0");
-        return temp;
+        return "0";
     }
 
     private void translateBoolean(ASTNode cond, String trueLabel, String falseLabel) {
@@ -298,11 +486,18 @@ public class CodeGenerator implements TypeVisitor {
             return;
         }
         
+        if (cond instanceof UnopNode) {
+            UnopNode u = (UnopNode) cond;
+            if ("not".equalsIgnoreCase(u.getOperator())) {
+                translateBoolean(u.getOperand(), falseLabel, trueLabel);
+                return;
+            }
+        }
+        
         if (cond instanceof BinopNode) {
             BinopNode b = (BinopNode) cond;
             String op = b.getOperator();
             
-            // Handle AND (short-circuit evaluation)
             if ("and".equalsIgnoreCase(op)) {
                 String midLabel = newLabel();
                 translateBoolean(b.getLeft(), midLabel, falseLabel);
@@ -311,7 +506,6 @@ public class CodeGenerator implements TypeVisitor {
                 return;
             }
             
-            // Handle OR (short-circuit evaluation)
             if ("or".equalsIgnoreCase(op)) {
                 String midLabel = newLabel();
                 translateBoolean(b.getLeft(), trueLabel, midLabel);
@@ -320,7 +514,6 @@ public class CodeGenerator implements TypeVisitor {
                 return;
             }
             
-            // Handle comparison operators
             if (isComparison(op)) {
                 String left = evaluateExpression(b.getLeft());
                 String right = evaluateExpression(b.getRight());
@@ -331,17 +524,6 @@ public class CodeGenerator implements TypeVisitor {
             }
         }
         
-        // Handle NOT
-        if (cond instanceof UnopNode) {
-            UnopNode u = (UnopNode) cond;
-            if ("not".equalsIgnoreCase(u.getOperator())) {
-                // NOT swaps true and false labels
-                translateBoolean(u.getOperand(), falseLabel, trueLabel);
-                return;
-            }
-        }
-        
-        // Default: treat as boolean expression (non-zero = true)
         String temp = evaluateExpression(cond);
         emit("IF " + temp + " <> 0 THEN GOTO " + trueLabel);
         emit("GOTO " + falseLabel);
